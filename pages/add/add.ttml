@@ -87,7 +87,7 @@
           <text class="required">*</text>
           <view class="input-counter">（当前输入字数：{{name.length}}/30）</view>
         </view>
-        <input class="form-input" placeholder='{{isCamp ? "请输入营地名称，如人民公园停车场" : "如**超市/**夜市" }}' model:value="{{name}}" maxlength="30" bindinput="onNameInput" />
+        <input class="form-input" placeholder='{{isCamp ? "请输入营地名称，如人民公园停车场" : "如**超市/**夜市" }}' value="{{name}}" maxlength="30" bindinput="onNameInput" />
 
       </view>
 
@@ -98,7 +98,7 @@
           <text class="required">*</text>
           <view class="input-counter">（当前输入字数：{{intro.length}}/500）</view>
         </view>
-        <textarea class="form-textarea" placeholder='{{isCamp ? "描述营地的特色、设施等信息。如是否收费？收费多少？有无水卫？能否充电等。" : "输入介绍，如：是不是当地最大的超市，菜市场，夜市，厕所的开放时间等"}}' model:value="{{intro}}" maxlength="500" bindinput="onIntroInput" />
+        <textarea class="form-textarea" placeholder='{{isCamp ? "描述营地的特色、设施等信息。如是否收费？收费多少？有无水卫？能否充电等。" : "输入介绍，如：是不是当地最大的超市，菜市场，夜市，厕所的开放时间等"}}' value="{{intro}}" maxlength="500" bindinput="onIntroInput" />
 
       </view>
 

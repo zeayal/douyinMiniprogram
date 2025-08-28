@@ -28,14 +28,14 @@
     <!-- 反馈描述 -->
     <view class="form-item">
       <view class="form-label">反馈内容 <text class="required">*</text></view>
-      <textarea class="feedback-textarea" placeholder="请详细描述您遇到的问题或建议..." model:value="{{content}}" maxlength="500" />
+      <textarea class="feedback-textarea" placeholder="请详细描述您遇到的问题或建议..." value="{{content}}" maxlength="500" />
       <view class="input-counter">{{content.length}}/500</view>
     </view>
 
     <!-- 联系方式 -->
     <view class="form-item">
       <view class="form-label">联系方式</view>
-      <input class="form-input" placeholder="请留下您的微信号或手机号（选填）" model:value="{{contact}}" />
+      <input class="form-input" placeholder="请留下您的微信号或手机号（选填）" value="{{contact}}" />
       <view class="contact-tips">填写联系方式，便于我们及时回复您</view>
     </view>
 

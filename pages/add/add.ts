@@ -194,7 +194,7 @@ Page({
     }, 1000); // 1秒防抖
   },
 
-  onLoad(options) {
+  onLoad(options: any) {
     if (options.mode === "edit" && options.id) {
       this.setData({
         mode: "edit",
@@ -213,7 +213,7 @@ Page({
           content: "检测到您有未完成的表单，是否恢复？",
           confirmText: "恢复",
           cancelText: "重新开始",
-          success: (res) => {
+          success: (res: any) => {
             if (!res.confirm) {
               // 用户选择重新开始，清除草稿
               this.clearLocalStorage();
