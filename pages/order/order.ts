@@ -53,7 +53,7 @@ Page({
 
   async fetchOrderList() {
     try {
-      wx.showLoading({
+      tt.showLoading({
         title: '加载中'
       })
       const { page, pageSize } = this.data;
@@ -87,8 +87,8 @@ Page({
       }
 
     } finally {
-      wx.hideLoading();
-      wx.stopPullDownRefresh()
+      tt.hideLoading();
+      tt.stopPullDownRefresh()
       this.setData({
         isLoading: false
       })
@@ -97,7 +97,7 @@ Page({
 
   handleClickItem(e) {
     const orderNo = e.currentTarget.dataset.orderno
-    wx.navigateTo({
+    tt.navigateTo({
       url: '/pages/orderDetail/orderDetail?orderNo=' + orderNo
     })
   }

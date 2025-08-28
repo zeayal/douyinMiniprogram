@@ -78,7 +78,7 @@ Page({
 
   onLoad() {
     try {
-      this.mapContext = wx.createMapContext("mapContext", this);
+      this.mapContext = tt.createMapContext("mapContext", this);
       this.getInitCurrentLocation(INIT_SCALE);
       this.handleLoadCached();
       // 初始化自定义Toast
@@ -89,7 +89,7 @@ Page({
       // 检查是否处于单页模式（朋友圈分享场景）
       const isInSinglePageMode = isSinglePageMode();
       if (isInSinglePageMode) {
-        wx.showModal({
+        tt.showModal({
           title: '提示',
           content: '点击下方前往小程序使用完整功能',
           showCancel: false,
@@ -162,13 +162,21 @@ Page({
 
   // 点击地图上的标记点
   handleMarkertap: async function (e: any) {
-    const markerId = e.markerId;
-    const clickedMarker = this.data.markers.find((m) => m.id === markerId);
+
+    const markerId = Number(e.detail.markerId);
+
+    const clickedMarker = this.data.markers.find((m: any) => m.id === markerId);
+
+    if (!clickedMarker) {
+      console.log('点击地图上的标记点，未查找到clickedMarker', e)
+      return
+    }
+    console.log('markerId', markerId, clickedMarker)
     this.setTapAvtiveMarker(markerId);
     const currentSelectedDetail = this.data._allSpots.find((sopt: any) => sopt.markerId === clickedMarker.id);
     if (!currentSelectedDetail) {
       console.error('未找到对应的营地信息');
-      wx.showToast({
+      tt.showToast({
         title: '未找到对应的营地信息，请重启小程序重试',
         icon: 'error'
       })
@@ -268,7 +276,7 @@ Page({
   navigateToDetail: function () {
     const { selectedSpot } = this.data;
     if (selectedSpot) {
-      wx.navigateTo({
+      tt.navigateTo({
         url: `/pages/detail/detail?id=${selectedSpot.id}`, // 假设详情页需要id
       });
     }
@@ -299,13 +307,15 @@ Page({
   },
 
   onRegionChange(e: any) {
-    const { type, causedBy } = e;
+    const { type } = e.detail;
+    console.log('onRegionChange', e)
     if (type === "end") {
+      console.log('onRegionChange', e.detail)
       const { centerLocation, scale: newScale } = e.detail;
       const { latitude, longitude } = centerLocation;
       this.setData({ centerLocation: centerLocation });
       const { lastRequestLocation } = this.data
-
+      console.log('lastRequestLocation?.latitude', typeof lastRequestLocation?.latitude)
       const distanceGCJ02 = lastRequestLocation?.latitude ? calculateDistanceGCJ02(
         latitude,
         longitude,
@@ -314,19 +324,22 @@ Page({
       ) : 0;
       const moveDistance = lastRequestLocation ? distanceGCJ02 / 1000 : this.data.distanceThreshold + 1;
 
-      const canDragRequest = causedBy === 'drag' && moveDistance > this.data.distanceThreshold;
-
-      if (causedBy === 'scale') {
-        // 弱网优化
-        this.handleMarkersTitleWithScale(this.data._allSpots, newScale);
-      }
-      if (causedBy === 'scale' || canDragRequest) {
+      const canDragRequest = moveDistance > this.data.distanceThreshold;
+      if (canDragRequest) {
         this.getList({
           latitude,
           longitude,
           scale: newScale
         });
+
       }
+
+
+      // if (causedBy === 'scale') {
+      //   // 弱网优化
+      //   this.handleMarkersTitleWithScale(this.data._allSpots, newScale);
+      // }
+
     }
   },
 
@@ -404,6 +417,7 @@ Page({
           scoreNumber: Math.round(item.averageScore || 0)
         }
       })
+      console.log('typeof latitude', typeof latitude)
       this.setData({
         lastRequestLocation: {
           latitude,
@@ -588,6 +602,7 @@ Page({
 
   getInitCurrentLocation: async function (scale: number) {
     const res = await getLocationAsync({ showModalTip: true });
+    console.log('getInitCurrentLocationres', res)
     const { latitude, longitude } = res;
     this.setData({
       scale: scale,
@@ -604,7 +619,7 @@ Page({
 
   // 跳转到新增营地页面
   navigateToAdd() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: "/pages/add/add",
     });
   },
@@ -617,13 +632,13 @@ Page({
   },
 
   navigateToMyFav() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: "/pages/collection/collection?type=collection&title=我的收藏",
     });
   },
   // 跳转到我的页面
   navigateToProfile() {
-    wx.switchTab({
+    tt.switchTab({
       url: "/pages/profile/profile",
     });
   },
@@ -754,7 +769,7 @@ Page({
   },
   // 点击热门线路
   navigateToTourToutes() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: `/pages/tourRoutes/tourRoutes`,
     });
   },

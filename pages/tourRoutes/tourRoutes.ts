@@ -39,22 +39,15 @@ Page({
     mapCenterLocation: {
       latitude: 29.65, // 默认展示布达拉宫定位，展示318
       longitude: 91.12
-    },
-    canAccessMoreRoutes: true
+    }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad() {
-    this.mapContext = wx.createMapContext("mapContext", this);
-    this.createAd();
-    const canAccessMoreRoutes = await this.checkAccess();
-    if (canAccessMoreRoutes) {
-      this.getCurrentLocationAndNextGetNearTourRoutes();
-    } else {
-      this.getOneHotTourRoute()
-    }
+    this.mapContext = tt.createMapContext("mapContext", this);
+    this.getCurrentLocationAndNextGetNearTourRoutes();
   },
 
   onShareAppMessage() {
@@ -147,7 +140,6 @@ Page({
               canAccessMoreRoutes: isUnlocked
             })
           }
-
           if (Array.isArray(routes)) {
             this.handleDataListToMarkerAndPolyline({ tourRoutes: routes });
             this.setData({
@@ -238,7 +230,7 @@ Page({
     const routeId = e.currentTarget.dataset.routeid
     // 如果有路线ID，跳转到详情页面
     if (routeId) {
-      wx.navigateTo({
+      tt.navigateTo({
         url: `/pages/routeDetail/routeDetail?id=${routeId}`
       });
     }
@@ -256,7 +248,7 @@ Page({
 
   // 新增线路
   addRoute() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: '/pages/addRoute/addRoute'
     });
   },
@@ -272,88 +264,9 @@ Page({
     const { tourRoutes } = this.data;
     if (index >= 0) {
       const tourRoute = tourRoutes[index];
-      wx.navigateTo({
+      tt.navigateTo({
         url: `/pages/routeDetail/routeDetail?id=${tourRoute.id}`
       });
-    }
-  },
-
-  createAd() {
-    // 在页面onLoad回调事件中创建激励视频广告实例
-    if (wx.createRewardedVideoAd) {
-      const videoAd = wx.createRewardedVideoAd({
-        adUnitId: 'adunit-5da3162edeacb71c'
-      })
-      videoAd.onLoad(() => {
-        console.log('激励视频 广告初始化成功')
-      });
-      videoAd.onError((err) => {
-        console.error('激励视频光告加载失败', err)
-      })
-      videoAd.onClose(async (res) => {
-        // {isEnded: true}
-        if (res.isEnded) {
-          // 获取奖励
-          // 广告观看成功，调用解锁接口
-          const res = await request({
-            url: '/api/tour-routes/unlock-after-ad',
-            method: "POST",
-            data: {}
-          })
-
-          if (res.code === 0) {
-            // 解锁成功，刷新线路列表
-            this.getCurrentLocationAndNextGetNearTourRoutes()
-            res.msg && wx.showModal({
-              title: '获取高级权益提示',
-              content: res.msg,
-              showCancel: false,
-              confirmText: '知道了'
-            })
-          }
-        }
-        console.error('激励视频光告关闭', res)
-      });
-      rewardedVideoAd = videoAd;
-    }
-  },
-
-  // 展示激励广告
-  async showAds() {
-    // 用户触发广告后，显示激励视频广告
-    try {
-      if (rewardedVideoAd) {
-        await rewardedVideoAd.show()
-      }
-    } catch (err) {
-      rewardedVideoAd.load()
-        .then(() => {
-          rewardedVideoAd.show()
-        }).catch(err => {
-          console.error('激励视频 广告显示失败', err)
-        })
-    }
-  },
-
-  // 获取用户是否有权限查看更多线路
-  async checkAccess() {
-    try {
-      const res = await request({
-        url: '/api/tour-routes/user-access',
-        method: "GET",
-        data: {}
-      })
-      if (res.code === 0) {
-        const canAccessMoreRoutes = res.data.isUnlocked
-        this.setData({
-          canAccessMoreRoutes
-        })
-        return canAccessMoreRoutes
-      }
-      return false
-    } catch (error) {
-      console.error('获取用户权限失败', error);
-      return false
     }
   }
 

@@ -35,23 +35,23 @@ Page({
     const type = e.currentTarget.dataset.type;
     switch (type) {
       case "collection":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/collection/collection?type=collection&title=我的收藏",
         });
         break;
       case "checkin":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/collection/collection?type=checkin&title=我的打卡",
         });
         break;
       case "camp":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/collection/collection?type=camp&title=我的营地",
         });
         break;
 
       case "addCamp":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/add/add",
         });
         break;
@@ -62,18 +62,18 @@ Page({
     const type = e.currentTarget.dataset.type;
     switch (type) {
       case "order":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/order/order",
         });
         break;
       case "feedback":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/feedback/feedback",
         });
         break;
 
       case "about":
-        wx.navigateTo({
+        tt.navigateTo({
           url: "/pages/about/about",
         });
         break;
@@ -83,11 +83,11 @@ Page({
 
   // 处理会员购买
   handleBuyVip: function () {
-    // wx.showToast({
+    // tt.showToast({
     //   title: "目前免费使用阶段，有任何建议可通过“意见反馈”告知",
     //   icon: "none",
     // });
-    wx.navigateTo({
+    tt.navigateTo({
       url: "/pages/vip/vip"
     })
   },
@@ -95,7 +95,7 @@ Page({
  * 跳转到FAQ页面
  */
   navigateToFaq() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: '/pages/faq/faq'
     });
   }

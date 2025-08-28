@@ -24,13 +24,13 @@ Page({
  
   // 选择图片
   chooseImage() {
-    wx.chooseMedia({
+    tt.chooseMedia({
       count: 9 - this.data.pics.length,
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
         const file = res.tempFiles[0];
-        wx.uploadFile({
+        tt.uploadFile({
           url: BASE_URL + '/api/fs-service/uploadFileToOSS',
           filePath: file.tempFilePath,
           name: 'files',
@@ -41,14 +41,14 @@ Page({
             const data = res.data
             const jsonData = JSON.parse(data);
             if (jsonData.code === 0) {
-              wx.showToast({ title: jsonData.msg, icon: 'success' })
+              tt.showToast({ title: jsonData.msg, icon: 'success' })
               const newPic = { previewUrl: file.tempFilePath, serverFilename: jsonData.data.filename }
               const pics = this.data.pics.concat([newPic]);
               this.setData({
                 "pics": pics,
               });
             } else {
-              wx.showToast({ title: jsonData.msg, icon: 'error' })
+              tt.showToast({ title: jsonData.msg, icon: 'error' })
             }
           }
         })
@@ -74,7 +74,7 @@ Page({
 
     // 表单验证
     if (!feedbackType) {
-      wx.showToast({
+      tt.showToast({
         title: "请选择反馈类型",
         icon: "none",
       });
@@ -82,7 +82,7 @@ Page({
     }
 
     if (!content.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: "请填写反馈内容",
         icon: "none",
       });
@@ -90,7 +90,7 @@ Page({
     }
 
     // 显示上传中提示
-    wx.showLoading({
+    tt.showLoading({
       title: "提交中...",
       mask: true,
     });
@@ -115,11 +115,11 @@ Page({
         },
       });
 
-      wx.hideLoading();
+      tt.hideLoading();
 
       // 根据接口返回处理结果
       if (res.code === 0) {
-        wx.showToast({
+        tt.showToast({
           title: "感谢您的反馈！",
           icon: "success",
           duration: 2000,
@@ -127,17 +127,17 @@ Page({
 
         // 成功后清空表单
         setTimeout(() => {
-          wx.navigateBack();
+          tt.navigateBack();
         }, 3000);
       } else {
-        wx.showToast({
+        tt.showToast({
           title: res.msg || "提交失败，请重试",
           icon: "none",
         });
       }
     } catch (error) {
-      wx.hideLoading();
-      wx.showToast({
+      tt.hideLoading();
+      tt.showToast({
         title: "网络错误，请稍后再试",
         icon: "none",
       });

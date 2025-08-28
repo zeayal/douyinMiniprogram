@@ -3,7 +3,7 @@
 ## 组件特性
 
 ### ✅ **完全兼容微信Toast API**
-- 使用方式与 `wx.showToast` 完全一致
+- 使用方式与 `tt.showToast` 完全一致
 - 支持所有原有参数和回调函数
 - 完美支持换行显示
 
@@ -55,7 +55,7 @@ Page({
 
 ## 使用方法
 
-### 1. 基本使用（与wx.showToast完全一致）
+### 1. 基本使用（与tt.showToast完全一致）
 ```typescript
 // 字符串形式
 showToast('操作成功');
@@ -167,7 +167,7 @@ Page({
 
 ## 优势对比
 
-### 相比原生wx.showToast的优势：
+### 相比原生tt.showToast的优势：
 
 1. **完美支持换行**：
    - 原生Toast换行可能不生效

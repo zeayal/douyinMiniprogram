@@ -58,7 +58,7 @@ Page({
     if (orderNo) {
       this.getOrderDetail(orderNo);
     } else {
-      wx.showToast({
+      tt.showToast({
         icon: 'error',
         title: '未传递订单号'
       })

@@ -113,17 +113,17 @@ Component({
 
         if (res.code === 0) {
           this.setData({ isCollected: !isCollected });
-          wx.showToast({
+          tt.showToast({
             title: res.msg,
             icon: "none",
             duration: 1500,
           });
         } else {
-          wx.showToast({ title: res.msg, icon: "none" });
+          tt.showToast({ title: res.msg, icon: "none" });
         }
       } catch (error) {
         console.log("收藏操作失败:", error);
-        wx.showToast({ title: "网络请求失败", icon: "none" });
+        tt.showToast({ title: "网络请求失败", icon: "none" });
       }
     }
   },

@@ -128,7 +128,7 @@ Component({
         const color = '#' + hex.toUpperCase();
         this.updateColor(color);
       } else {
-        wx.showToast({
+        tt.showToast({
           title: '请输入有效的颜色值',
           icon: 'none'
         });

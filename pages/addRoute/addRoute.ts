@@ -109,7 +109,7 @@ Page({
         // 检查草稿是否在24小时内
         const isExpired = Date.now() - savedData.timestamp > 24 * 60 * 60 * 1000;
         if (isExpired) {
-          wx.removeStorageSync('addRoute_form_draft');
+          tt.removeStorageSync('addRoute_form_draft');
           return false;
         }
 
@@ -134,7 +134,7 @@ Page({
   // 清除localStorage中的草稿
   clearLocalStorage() {
     try {
-      wx.removeStorageSync('addRoute_form_draft');
+      tt.removeStorageSync('addRoute_form_draft');
     } catch (error) {
       console.error('清除草稿失败:', error);
     }
@@ -157,7 +157,7 @@ Page({
     // 检查是否为编辑模式
     if (options.id) {
       // 设置页面标题为编辑模式
-      wx.setNavigationBarTitle({
+      tt.setNavigationBarTitle({
         title: '编辑线路'
       });
       this.loadRouteDetail(options.id);
@@ -165,13 +165,13 @@ Page({
       // 页面加载时尝试恢复草稿
       const hasDraft = this.loadFromLocalStorage();
       if (hasDraft) {
-        wx.showModal({
+        tt.showModal({
           title: '发现草稿',
           content: '检测到您有未完成的线路草稿，是否恢复？',
           success: (res) => {
             if (res.confirm) {
               // 用户确认恢复草稿，数据已经在 loadFromLocalStorage 中恢复了
-              wx.showToast({
+              tt.showToast({
                 title: '草稿已恢复',
                 icon: 'success'
               });
@@ -195,7 +195,7 @@ Page({
   // 加载路线详情（编辑模式）
   async loadRouteDetail(routeId: string) {
     try {
-      wx.showLoading({ title: '加载中...' });
+      tt.showLoading({ title: '加载中...' });
       const res = await request({
         url: '/api/tour-routes/detail',
         method: 'GET',
@@ -221,24 +221,24 @@ Page({
           this.generateRoutePreview();
         }
 
-        wx.showToast({
+        tt.showToast({
           title: '路线加载成功',
           icon: 'success'
         });
       } else {
-        wx.showToast({
+        tt.showToast({
           title: (res as any).message || '加载路线失败',
           icon: 'error'
         });
       }
     } catch (error) {
       console.error('加载路线详情失败', error);
-      wx.showToast({
+      tt.showToast({
         title: '网络请求失败，请重试',
         icon: 'error'
       });
     } finally {
-      wx.hideLoading();
+      tt.hideLoading();
     }
   },
 
@@ -281,7 +281,7 @@ Page({
       showColorPickerModal: false,
       userHasInteracted: true
     }, () => this.triggerSave())
-    wx.showToast({
+    tt.showToast({
       title: '颜色选择成功',
       icon: 'success'
     });
@@ -335,7 +335,7 @@ Page({
   // 删除途经点
   deleteWaypoint(e: any) {
     const index = e.currentTarget.dataset.index;
-    wx.showModal({
+    tt.showModal({
       title: '确认删除',
       content: '确定要删除这个途经点吗？',
       success: (res) => {
@@ -372,7 +372,7 @@ Page({
 
   // 选择位置
   selectLocation() {
-    wx.chooseLocation({
+    tt.chooseLocation({
       success: (res) => {
         const { name, address } = res;
         if (!this.data.editingWaypoint.name) {
@@ -389,13 +389,13 @@ Page({
       fail: (err) => {
         console.error('选择位置失败', err);
         if (err.errMsg.includes('auth deny')) {
-          wx.showModal({
+          tt.showModal({
             title: '位置权限',
             content: '需要获取您的位置权限，请在设置中开启',
             showCancel: false
           });
         } else {
-          wx.showToast({
+          tt.showToast({
             title: '选择位置失败',
             icon: 'none'
           });
@@ -416,7 +416,7 @@ Page({
     const { editingWaypoint, editingWaypointIndex, waypoints, belowInsertWaypointIndex } = this.data;
     // 验证必填项
     if (!editingWaypoint.name.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: '请输入途经点名称',
         icon: 'none'
       });
@@ -424,7 +424,7 @@ Page({
     }
 
     if (!editingWaypoint.address || !editingWaypoint.latitude || !editingWaypoint.longitude) {
-      wx.showToast({
+      tt.showToast({
         title: '请选择途经点位置',
         icon: 'none'
       });
@@ -458,7 +458,7 @@ Page({
       userHasInteracted: true
     }, () => this.triggerSave())
 
-    wx.showToast({
+    tt.showToast({
       title: editingWaypointIndex === -1 ? '添加成功' : '编辑成功',
       icon: 'success'
     });
@@ -470,7 +470,7 @@ Page({
 
     // 验证必填项
     if (!routeName.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: '请输入线路名称',
         icon: 'none'
       });
@@ -478,7 +478,7 @@ Page({
     }
 
     if (waypoints.length < 2) {
-      wx.showToast({
+      tt.showToast({
         title: '至少需要2个途经点',
         icon: 'none'
       });
@@ -488,14 +488,14 @@ Page({
     // 验证所有途经点都有位置信息
     const invalidWaypoints = waypoints.filter(wp => !wp.address || !wp.latitude || !wp.longitude);
     if (invalidWaypoints.length > 0) {
-      wx.showToast({
+      tt.showToast({
         title: '请完善所有途经点信息',
         icon: 'none'
       });
       return;
     }
 
-    wx.showLoading({
+    tt.showLoading({
       title: isEditMode ? '保存中...' : '提交中...'
     });
 
@@ -530,8 +530,8 @@ Page({
       }
 
       if (res.code === 0) {
-        wx.hideLoading();
-        wx.showToast({
+        tt.hideLoading();
+        tt.showToast({
           title: isEditMode ? (res.msg || '修改成功') : (res.msg || '提交成功'),
           icon: 'none'
         });
@@ -541,15 +541,15 @@ Page({
 
         // 延迟返回上一页
         setTimeout(() => {
-          wx.navigateBack();
+          tt.navigateBack();
         }, 1500);
       } else {
         throw new Error((res as any).msg || (isEditMode ? '修改失败' : '保存失败'));
       }
     } catch (error: any) {
-      wx.hideLoading();
+      tt.hideLoading();
       console.error('保存线路失败', error);
-      wx.showToast({
+      tt.showToast({
         title: error?.msg || '保存失败',
         icon: 'none'
       });
@@ -558,13 +558,13 @@ Page({
 
   // 取消
   cancel() {
-    wx.navigateBack();
+    tt.navigateBack();
   },
 
   // 地图预览相关方法
   showRoutePreview() {
     if (this.data.waypoints.length === 0) {
-      wx.showToast({
+      tt.showToast({
         title: '请先添加途经点',
         icon: 'none'
       });
@@ -577,7 +577,7 @@ Page({
     });
 
     // 延迟一帧生成预览数据，确保弹框已渲染
-    wx.nextTick(() => {
+    tt.nextTick(() => {
       this.generateRoutePreview();
     });
   },
@@ -702,7 +702,7 @@ Page({
     const waypoint = this.data.waypoints[markerId];
 
     if (waypoint) {
-      wx.showToast({
+      tt.showToast({
         title: `${markerId + 1}. ${waypoint.name || '途经点'}`,
         icon: 'none',
         duration: 2000
@@ -760,7 +760,7 @@ Page({
       userHasInteracted: true
     }, () => this.triggerSave())
 
-    wx.showToast({
+    tt.showToast({
       title: '排序已更新',
       icon: 'success',
       duration: 1000

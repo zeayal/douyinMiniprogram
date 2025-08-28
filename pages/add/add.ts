@@ -139,7 +139,7 @@ Page({
         const isExpired =
           Date.now() - savedData.timestamp > 24 * 60 * 60 * 1000;
         if (isExpired) {
-          wx.removeStorageSync("add_form_draft");
+          tt.removeStorageSync("add_form_draft");
           return false;
         }
 
@@ -175,7 +175,7 @@ Page({
   // 清除localStorage中的草稿
   clearLocalStorage() {
     try {
-      wx.removeStorageSync("add_form_draft");
+      tt.removeStorageSync("add_form_draft");
     } catch (error) {
       console.error("清除草稿失败:", error);
     }
@@ -201,14 +201,14 @@ Page({
         id: options.id,
       });
       this.fetchSpotDetail(options.id);
-      wx.setNavigationBarTitle({
+      tt.setNavigationBarTitle({
         title: "修改营地信息",
       });
     } else {
       // 新增模式，尝试恢复草稿
       const hasDraft = this.loadFromLocalStorage();
       if (hasDraft) {
-        wx.showModal({
+        tt.showModal({
           title: "发现草稿",
           content: "检测到您有未完成的表单，是否恢复？",
           confirmText: "恢复",
@@ -288,13 +288,13 @@ Page({
           pics: spot.images,
         });
       } else {
-        wx.showToast({
+        tt.showToast({
           title: "获取营地信息失败",
           icon: "error",
         });
       }
     } catch (error) {
-      wx.showToast({
+      tt.showToast({
         title: "获取营地信息失败",
         icon: "error",
       });
@@ -411,7 +411,7 @@ Page({
 
   // 选择位置
   chooseLocation() {
-    wx.chooseLocation({
+    tt.chooseLocation({
       success: (res) => {
         const { name, latitude, longitude, address } = res || {};
         this.setData({
@@ -432,7 +432,7 @@ Page({
 
   // 选择图片
   chooseImage() {
-    wx.chooseMedia({
+    tt.chooseMedia({
       count: 9 - this.data.pics.length,
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
@@ -443,7 +443,7 @@ Page({
           ...file,
           originalIndex: startIndex + idx,
         }));
-        wx.showLoading({
+        tt.showLoading({
           title: "处理中...",
           mask: true,
         });
@@ -453,11 +453,11 @@ Page({
           return new Promise<CompressedFile>((resolve, reject) => {
             const compressWithQuality = (quality: number) => {
               return new Promise<CompressedFile>((resolve, reject) => {
-                wx.compressImage({
+                tt.compressImage({
                   src: file.tempFilePath,
                   quality,
                   success: (res) => {
-                    wx.getFileInfo({
+                    tt.getFileInfo({
                       filePath: res.tempFilePath,
                       success: (fileInfo) => {
                         if (fileInfo.size > 300 * 1024 && quality > 15) {
@@ -494,7 +494,7 @@ Page({
 
         Promise.all(compressPromises)
           .then((compressedFiles) => {
-            wx.hideLoading();
+            tt.hideLoading();
             this.setData({
               uploadProgress: {
                 total: compressedFiles.length,
@@ -518,7 +518,7 @@ Page({
                   retryCount++;
                   isRetrying = true;
                   if (retryCount <= maxRetries) {
-                    wx.showToast({
+                    tt.showToast({
                       title: `第${index + 1}张重试第${retryCount}次`,
                       icon: "none",
                       duration: 1000,
@@ -537,7 +537,7 @@ Page({
                 const upload = () => {
                   if (timeoutTimer) clearTimeout(timeoutTimer);
                   uploadStartTime = Date.now();
-                  uploadTask = wx.uploadFile({
+                  uploadTask = tt.uploadFile({
                     url: BASE_URL + "/api/fs-service/uploadFileToOSS",
                     filePath: file.tempFilePath,
                     name: "files",
@@ -637,13 +637,13 @@ Page({
                 this.triggerSave();
 
                 if (failedCount > 0) {
-                  wx.showToast({
+                  tt.showToast({
                     title: `${failedCount}张图片上传失败`,
                     icon: "error",
                     duration: 2000,
                   });
                 } else {
-                  wx.showToast({
+                  tt.showToast({
                     title: "上传成功",
                     icon: "success",
                     duration: 2000,
@@ -657,7 +657,7 @@ Page({
                     show: false,
                   },
                 });
-                wx.showToast({
+                tt.showToast({
                   title: error.message || "上传失败",
                   icon: "error",
                   duration: 2000,
@@ -665,8 +665,8 @@ Page({
               });
           })
           .catch((error) => {
-            wx.hideLoading();
-            wx.showToast({
+            tt.hideLoading();
+            tt.showToast({
               title: "图片处理失败",
               icon: "error",
               duration: 2000,
@@ -674,7 +674,7 @@ Page({
           });
       },
       fail: (error) => {
-        wx.showToast({
+        tt.showToast({
           title: error.errMsg || "选择图片失败",
           icon: "error",
           duration: 2000,
@@ -701,7 +701,7 @@ Page({
       const pics = [...this.data.pics];
       [pics[index - 1], pics[index]] = [pics[index], pics[index - 1]];
       this.setData({ pics });
-      wx.showToast({ icon: "none", title: "图片往前移动" });
+      tt.showToast({ icon: "none", title: "图片往前移动" });
       this.triggerSave();
     }
   },
@@ -712,7 +712,7 @@ Page({
     const pics = [...this.data.pics];
     [pics[index], pics[index + 1]] = [pics[index + 1], pics[index]];
     this.setData({ pics });
-    wx.showToast({ icon: "none", title: "图片往后移动" });
+    tt.showToast({ icon: "none", title: "图片往后移动" });
     this.triggerSave();
   },
 
@@ -737,7 +737,7 @@ Page({
       address,
     } = this.data;
     if (!this.validateForm()) return;
-    wx.showLoading({ title: "提交中..." });
+    tt.showLoading({ title: "提交中..." });
 
     let res: any = {};
     const commonData = {
@@ -774,18 +774,18 @@ Page({
         data: commonData,
       });
     }
-    wx.hideLoading();
+    tt.hideLoading();
     if (res.code === 0) {
       // 提交成功后清除草稿
       this.clearLocalStorage();
-      wx.showToast({
+      tt.showToast({
         title: res.msg,
         icon: "none",
         duration: 3000,
         success: () => {
           // 返回上一页
           setTimeout(() => {
-            wx.navigateBack();
+            tt.navigateBack();
           }, 3000);
         },
       });
@@ -794,7 +794,7 @@ Page({
 
   validateForm() {
     if (!this.data.latitude || !this.data.longitude) {
-      wx.showToast({
+      tt.showToast({
         title: "请选择位置",
         icon: "none",
       });
@@ -802,25 +802,25 @@ Page({
     }
 
     if (this.data.isCamp === null) {
-      wx.showToast({ title: "请选择是否为营地", icon: "none" });
+      tt.showToast({ title: "请选择是否为营地", icon: "none" });
       return false;
     }
 
     // 如果不是营地，需要选择便利设施
     if (this.data.isCamp === false && this.data.facility === "") {
-      wx.showToast({ title: "请选择便利设施", icon: "none" });
+      tt.showToast({ title: "请选择便利设施", icon: "none" });
       return false;
     }
 
     if (!this.data.name.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: "请输入名称",
         icon: "none",
       });
       return false;
     }
     if (!this.data.intro.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: "请输入介绍",
         icon: "none",
       });
@@ -830,37 +830,37 @@ Page({
     // 如果是营地，验证营地相关字段
     if (this.data.isCamp === true) {
       if (!this.data.campType) {
-        wx.showToast({ title: "请选择营地类型", icon: "none" });
+        tt.showToast({ title: "请选择营地类型", icon: "none" });
         return false;
       }
       if (this.data.is_charged === null) {
-        wx.showToast({ title: "请选择是否收费", icon: "none" });
+        tt.showToast({ title: "请选择是否收费", icon: "none" });
         return false;
       }
 
       if (this.data.hasToilet === null) {
-        wx.showToast({ title: "请选择是否有厕所", icon: "none" });
+        tt.showToast({ title: "请选择是否有厕所", icon: "none" });
         return false;
       }
 
       if (this.data.hasWater === null) {
-        wx.showToast({ title: "请选择是否可以接水", icon: "none" });
+        tt.showToast({ title: "请选择是否可以接水", icon: "none" });
         return false;
       }
 
       if (this.data.hasElectricity === null) {
-        wx.showToast({ title: "请选择是否有充电桩", icon: "none" });
+        tt.showToast({ title: "请选择是否有充电桩", icon: "none" });
         return false;
       }
 
       if (this.data.canPitchTent === null) {
-        wx.showToast({ title: "请选择是否可以搭帐篷", icon: "none" });
+        tt.showToast({ title: "请选择是否可以搭帐篷", icon: "none" });
         return false;
       }
     }
 
     if (this.data.pics.length === 0) {
-      wx.showToast({
+      tt.showToast({
         title: "请上传至少一张图片",
         icon: "none",
       });

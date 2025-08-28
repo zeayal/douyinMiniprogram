@@ -394,17 +394,18 @@ export function getLocationAsync(options?: {
     tt.getLocation({
       type: "gcj02",
       isHighAccuracy: true,
-      success: (res) => {
-
+      success: (res: any) => {
         try {
-          const { latitude, longitude } = res;
+          const { latitude: latitudeStr, longitude: longitudeStr } = res;
+          console.log('latitude, longitude', typeof latitudeStr, longitudeStr)
+          const latitude = Number(latitudeStr);
+          const longitude = Number(longitudeStr);
           tt.setStorage({ key: 'latitude', data: latitude });
           tt.setStorage({ key: 'longitude', data: longitude });
+          resolve({ latitude, longitude })
         } catch (e) {
           console.error('异步：获取当前定位 setStorage Error', e);
         }
-
-        resolve(res)
       },
       fail: (error: { errMsg: string }) => {
         if (options?.showModalTip) {

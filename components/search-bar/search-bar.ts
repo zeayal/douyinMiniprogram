@@ -24,19 +24,19 @@ Component({
    */
   methods: {
     clickSearch() {
-      wx.chooseLocation({
+      tt.chooseLocation({
         success: (res: any) => {
-          console.log(TAG, 'wx.chooseLocation success', res)
+          console.log(TAG, 'tt.chooseLocation success', res)
           const { name } = res;
           this.setData({ searchQuery: name });
           this.triggerEvent("chooseLocation", res);
         },
         fail: (error) => {
-          console.log(TAG, 'wx.chooseLocation fail', error)
+          console.log(TAG, 'tt.chooseLocation fail', error)
           this.setData({ searchQuery: '' });
         },
         complete: (res) => {
-          console.log(TAG, 'wx.chooseLocation complete', res)
+          console.log(TAG, 'tt.chooseLocation complete', res)
         }
       })
     },

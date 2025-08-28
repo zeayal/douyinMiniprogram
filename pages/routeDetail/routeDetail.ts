@@ -51,19 +51,19 @@ Page({
         this.loadRouteDetail();
       });
 
-      // 在页面onLoad回调事件中创建插屏广告实例
-      if (wx.createInterstitialAd) {
-        interstitialAd = wx.createInterstitialAd({
-          adUnitId: 'adunit-a96a085be6808b0b'
-        })
-        interstitialAd.onLoad(() => {
+      // // 在页面onLoad回调事件中创建插屏广告实例
+      // if (tt.createInterstitialAd) {
+      //   interstitialAd = tt.createInterstitialAd({
+      //     adUnitId: 'adunit-a96a085be6808b0b'
+      //   })
+      //   interstitialAd.onLoad(() => {
 
-        })
-        interstitialAd.onError((err) => {
-          console.error('插屏广告加载失败', err)
-        })
-        interstitialAd.onClose(() => { })
-      }
+      //   })
+      //   interstitialAd.onError((err) => {
+      //     console.error('插屏广告加载失败', err)
+      //   })
+      //   interstitialAd.onClose(() => { })
+      // }
 
     } else {
       this.setData({
@@ -72,16 +72,16 @@ Page({
       });
     }
 
-    this.mapContext = wx.createMapContext("mapContext", this);
+    this.mapContext = tt.createMapContext("mapContext", this);
   },
 
   onShow() {
     // 在适合的场景显示插屏广告
-    if (interstitialAd) {
-      interstitialAd.show().catch((err: any) => {
-        console.error('插屏广告显示失败', err)
-      })
-    }
+    // if (interstitialAd) {
+    //   interstitialAd.show().catch((err: any) => {
+    //     console.error('插屏广告显示失败', err)
+    //   })
+    // }
   },
 
 
@@ -117,7 +117,7 @@ Page({
       if (res.code === 0 && res.data) {
         const routeDetail = res.data;
         if (routeDetail.name) {
-          wx.setNavigationBarTitle({
+          tt.setNavigationBarTitle({
             title: routeDetail.name + '-路线详情'
           })
         }
@@ -231,7 +231,7 @@ Page({
 
   // 申请修改路线
   onEditRoute() {
-    wx.navigateTo({
+    tt.navigateTo({
       url: `/pages/addRoute/addRoute?id=${this.data.routeId}`
     });
   },

@@ -16,7 +16,7 @@ Page({
 
   onLoad(options) {
     const { title, type } = options;
-    this.mapCtx = wx.createMapContext("myMap");
+    this.mapCtx = tt.createMapContext("myMap");
     this.setData({ dynamicTitle: title, type })
     type && this.getCurrentLocation(type);
   },
@@ -24,7 +24,7 @@ Page({
   onShow() {
     const { dynamicTitle } = this.data
     if (dynamicTitle) {
-      wx.setNavigationBarTitle({
+      tt.setNavigationBarTitle({
         title: dynamicTitle
       })
     }
@@ -47,7 +47,7 @@ Page({
         this.getCurrentLocation(type)
       })
     } else {
-      wx.showToast({
+      tt.showToast({
         icon: "none",
         title: '我是有底线的',
         duration: 2000
@@ -80,7 +80,7 @@ Page({
   },
   async loadCollections(page: number, pageSize: number) {
     try {
-      wx.showLoading({
+      tt.showLoading({
         title: '加载中'
       })
       const res: any = await request({
@@ -122,16 +122,16 @@ Page({
 
     } catch (error) {
       console.error("加载失败", error);
-      wx.showToast({ title: "加载失败，请重试", icon: "none" });
+      tt.showToast({ title: "加载失败，请重试", icon: "none" });
     } finally {
       this.setData({ isLoading: false });
-      wx.stopPullDownRefresh();
-      wx.hideLoading()
+      tt.stopPullDownRefresh();
+      tt.hideLoading()
     }
   },
   async loadCheckins(page: number, pageSize: number) {
     try {
-      wx.showLoading({
+      tt.showLoading({
         title: '加载中'
       })
       const res = await request({
@@ -177,17 +177,17 @@ Page({
       }
     } catch (error) {
       console.error("加载失败", error);
-      wx.showToast({ title: "加载失败，请重试", icon: "none" });
+      tt.showToast({ title: "加载失败，请重试", icon: "none" });
     } finally {
       this.setData({ isLoading: false });
-      wx.stopPullDownRefresh();
-      wx.hideLoading();
+      tt.stopPullDownRefresh();
+      tt.hideLoading();
     }
   },
 
   async loadCamps(page: number, pageSize: number) {
     try {
-      wx.showLoading({
+      tt.showLoading({
         title: '加载中'
       })
       const res = await request({
@@ -234,18 +234,18 @@ Page({
       }
     } catch (error) {
       console.error("加载失败", error);
-      wx.showToast({ title: "加载失败，请重试", icon: "none" });
+      tt.showToast({ title: "加载失败，请重试", icon: "none" });
     } finally {
       this.setData({ isLoading: false });
-      wx.stopPullDownRefresh();
-      wx.hideLoading();
+      tt.stopPullDownRefresh();
+      tt.hideLoading();
     }
   },
 
   // 跳转到详情页
   navigateToDetail(e) {
     const spotId = e.detail.id;
-    wx.navigateTo({ url: `/pages/detail/detail?id=${spotId}` });
+    tt.navigateTo({ url: `/pages/detail/detail?id=${spotId}` });
   },
 
   // 导航到位置

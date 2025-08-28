@@ -82,7 +82,7 @@ Page({
       const isInSinglePageMode = isSinglePageMode();
       if (isInSinglePageMode) {
         // 延迟显示提示，避免影响页面加载
-        wx.showModal({
+        tt.showModal({
           title: '提示',
           content: '点击下方前往小程序使用完整功能',
           showCancel: false,
@@ -99,7 +99,7 @@ Page({
     const detail = this.data.detail;
     if (detail && detail.name) {
       const title = `${detail.name} - ${detail.isCharged ? '收费' : '免费'}露营地 | 户外露营、房车营地、自驾攻略`;
-      wx.setNavigationBarTitle({
+      tt.setNavigationBarTitle({
         title: title
       });
     }
@@ -214,7 +214,7 @@ Page({
       const isLoadingDistance = this.data.isLoadingDistance;
       // 判断是否在1公里范围内
       if (isLoadingDistance === true) {
-        wx.showToast({
+        tt.showToast({
           title: `距离计算中，暂时无法在该地点打卡`,
           icon: "none",
           duration: 3000,
@@ -223,7 +223,7 @@ Page({
       }
       if (directDistance == null) {
         // 为获取到定位权限，提示用户
-        wx.showToast({
+        tt.showToast({
           title: `请在小程序设置中允许获取当前位置信息`,
           icon: "none",
           duration: 3000,
@@ -237,14 +237,14 @@ Page({
         }); // 执行打卡逻辑
       } else {
         // 不在范围内，提示用户
-        wx.showToast({
+        tt.showToast({
           title: `距离该地点${directDistance.formatted}，1公里范围才可打卡`,
           icon: "none",
           duration: 3000,
         });
       }
     } catch (e) {
-      wx.showToast({
+      tt.showToast({
         title: `暂时无法打卡`,
         icon: "none",
         duration: 3000,
@@ -311,7 +311,7 @@ Page({
   async submitCheckin() {
     const { checkinContent, parking_spot_id, selectedRating } = this.data;
     if (!checkinContent.trim()) {
-      wx.showToast({
+      tt.showToast({
         title: "请输入打卡内容",
         icon: "none",
       });
@@ -319,14 +319,14 @@ Page({
     }
 
     if (selectedRating === 0) {
-      wx.showToast({
+      tt.showToast({
         title: "请选择营地评分",
         icon: "none",
       });
       return;
     }
 
-    wx.showLoading({
+    tt.showLoading({
       title: "提交中...",
     });
 
@@ -343,7 +343,7 @@ Page({
       });
 
       if (res.code === 0) {
-        wx.showToast({
+        tt.showToast({
           title: "打卡成功",
           icon: "success",
         });
@@ -351,19 +351,19 @@ Page({
         // 刷新打卡记录
         this.fetchCheckIns(parking_spot_id);
       } else {
-        wx.showToast({
+        tt.showToast({
           title: res.msg || "打卡失败",
           icon: "none",
         });
       }
     } catch (e) {
       console.error("打卡失败", e);
-      wx.showToast({
+      tt.showToast({
         title: "网络错误，请重试",
         icon: "none",
       });
     } finally {
-      wx.hideLoading();
+      tt.hideLoading();
     }
   },
 
@@ -406,17 +406,17 @@ Page({
 
       if (res.code === 0) {
         this.setData({ isCollected: !isCollected });
-        wx.showToast({
+        tt.showToast({
           title: res.msg,
           icon: "none",
           duration: 1500,
         });
       } else {
-        wx.showToast({ title: res.msg, icon: "none" });
+        tt.showToast({ title: res.msg, icon: "none" });
       }
     } catch (error) {
       console.error("收藏操作失败:", error);
-      wx.showToast({ title: "网络请求失败", icon: "none" });
+      tt.showToast({ title: "网络请求失败", icon: "none" });
     }
   },
 
@@ -426,7 +426,7 @@ Page({
     //   return
     // }
     const { parking_spot_id } = this.data;
-    wx.navigateTo({
+    tt.navigateTo({
       url: `/pages/add/add?id=${parking_spot_id}&mode=edit`,
     });
   }
