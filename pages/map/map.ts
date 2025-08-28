@@ -5,6 +5,7 @@ import { storage } from "../../utils/storage";
 import { getMarkerColor } from "../../utils/util";
 import { encryptWithAESCBC, decryptWithAESCBC } from "../../utils/crypto";
 import { isIOS } from '../../utils/device';
+import debounce from '../../utils/debounce';
 import { setToastInstance, showToast } from '../../utils/toast';
 import { isSinglePageMode } from "../../utils/device";
 
@@ -17,6 +18,9 @@ interface ParkingSpot {
   images?: string[]; // 假设有图片字段
   description?: string; // 新增：描述字段
   directDistance?: number; // 新增：距离字段  daisy
+  averageScore?: number; // 服务器返回的平均分
+  markerId?: number; // 地图 marker 的 id
+  scoreNumber?: number; // 由 averageScore 四舍五入得到
 }
 const SHARE_TITLE = '全国10万+免费床车房车露营地，点击查看'
 const MARKER_ICON = {
@@ -47,6 +51,9 @@ const Type_Map = {
   free: "筛选免费营地\n以详情为准"
 }
 
+type MapTypeKeys = keyof typeof Type_Map;
+type FilterType = 'all' | MapTypeKeys;
+
 const INIT_SCALE = 10;
 
 Page({
@@ -67,12 +74,13 @@ Page({
     currentLocation: { latitude: 0, longitude: 0 }, // 当前GPS定位，不可人为改变
     centerLocation: { latitude: 0, longitude: 0 },// 当前地图中心位置
     scale: INIT_SCALE, // 地图比例
-    filterType: 'all', // 新增：筛选类型
+    filterType: 'all' as FilterType, // 新增：筛选类型
     lastMapScale: INIT_SCALE, // 地图比例
   },
 
   // 声明防抖函数，稍后在 onLoad 中初始化
-  debounceSearchInput: (query: string) => { }, // 声明防抖搜索输入函数
+  debounceSearchInput: () => { }, // 声明防抖搜索输入函数
+  getListDebounced: () => { },
 
   // 声明地图上下文
   mapContext: null as any,
@@ -87,6 +95,10 @@ Page({
     } catch (e) {
       console.error('mapLoadError', e)
     } finally {
+      // 初始化列表请求防抖，避免 onRegionChange 在短时间内多次触发请求
+      this.getListDebounced = debounce((params: any) => {
+        this.getList(params);
+      }, 400);
       // 检查是否处于单页模式（朋友圈分享场景）
       const isInSinglePageMode = isSinglePageMode();
       if (isInSinglePageMode) {
@@ -238,7 +250,7 @@ Page({
   setTapAvtiveMarker(markerId: number) {
     try {
       // 更新选中状态
-      const markers = this.data.markers.map((m) => {
+      const markers = this.data.markers.map((m: any) => {
         let iconPath = "";
         if (markerId === m.id) {
           m.callout.bgColor = '#000000'; //'#c63520'
@@ -310,10 +322,12 @@ Page({
   onRegionChange(e: any) {
     const { type } = e.detail;
     console.log('onRegionChange', e)
+    const { centerLocation, scale: newScale } = e.detail;
+    const { latitude, longitude } = centerLocation;
+
     if (type === "end") {
       console.log('onRegionChange', e.detail)
-      const { centerLocation, scale: newScale } = e.detail;
-      const { latitude, longitude } = centerLocation;
+
       this.setData({ centerLocation: centerLocation });
       // 判读是否是缩放地图
       const { lastMapScale } = this.data
@@ -322,7 +336,7 @@ Page({
         this.setData({
           lastMapScale: newScale
         })
-        this.getList({
+        this.getListDebounced({
           latitude,
           longitude,
           scale: newScale
@@ -341,10 +355,10 @@ Page({
         lastRequestLocation?.latitude,
         lastRequestLocation?.longitude
       ) : 0;
-      const moveDistance = lastRequestLocation ? distanceGCJ02 / 1000 : this.data.distanceThreshold + 1;
+      const moveDistance = lastRequestLocation ? (distanceGCJ02 || 0) / 1000 : this.data.distanceThreshold + 1;
       const canDragRequest = moveDistance > this.data.distanceThreshold;
       if (canDragRequest) {
-        this.getList({
+        this.getListDebounced({
           latitude,
           longitude,
           scale: newScale
@@ -445,7 +459,7 @@ Page({
       this.handleMarkersTitleWithScale(this.data._allSpots, scale);
       this.handleCacheLatestRequestList(this.data._allSpots)
       if (this.data.filterType && this.data.filterType !== 'all') {
-        const newTitle = Type_Map[this.data.filterType]
+        const newTitle = Type_Map[this.data.filterType as MapTypeKeys]
         newTitle && showToast({
           title: `${newTitle}`,
           icon: "none",
@@ -529,7 +543,7 @@ Page({
         display: 'ALWAYS',
         padding: paddingValue,
         color: '#ffffff',
-        bgColor: isSelectedMarker ? '#000000' : getMarkerColor(scoreNumber),
+        bgColor: isSelectedMarker ? '#000000' : getMarkerColor(scoreNumber ?? 0),
       };
 
       if (this.data.selectedSpot?.id === id) {
@@ -567,10 +581,10 @@ Page({
     scoreNumber
   }: {
     isSelected: boolean,
-    scoreNumber: number
+    scoreNumber: number | undefined
   }) {
     let iconPath = MARKER_ICON.normal_star_0;
-    switch (scoreNumber) {
+    switch (scoreNumber ?? 0) {
       case 0:
         iconPath = MARKER_ICON.normal_star_0
         break;
@@ -792,7 +806,7 @@ Page({
   },
   // 选择位置
   handleChooseLocation(e: any) {
-    const { name, latitude, longitude } = e.detail || {};
+    const { latitude, longitude } = e.detail || {};
     this.setData({ scale: INIT_SCALE }, () => {
       this.mapContext.moveToLocation({ latitude, longitude, });
       this.getList({ latitude, longitude, scale: this.data.scale })
