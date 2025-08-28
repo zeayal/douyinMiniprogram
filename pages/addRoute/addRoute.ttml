@@ -23,7 +23,7 @@
 
   <view class="route-width">
     <view class="section-title">线路类型</view>
-    <radio-group bindchange="handleRouteWidthChange">
+    <radio-group bindchange="handleRouteWidthChange" class="weui-radio-group"> 
       <label class="weui-cell weui-check__label" tt:for="{{routeWidthItems}}" tt:key="{{item.value}}">
         <view class="weui-cell__hd">
           <radio value="{{item.value}}" checked="{{width === item.value}}" />

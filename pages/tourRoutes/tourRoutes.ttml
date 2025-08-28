@@ -1,6 +1,10 @@
 <!-- 旅游线路弹窗 -->
 <view class="tour-routes-container">
     <view class="tour-routes-list">
+        <view class="tip">
+            <text>拖动地图-加载地图中心点一千公里内的自驾线路</text>
+        </view>
+
         <view tt:for="{{tourRoutes}}" tt:key="id" class="route-item active" data-routeid="{{item.id}}" bindtap="selectRoute" style="{{'border-color: ' + item.color + 'E6;'}}">
             <view class="route-info">
                 <view class="route-title">
@@ -11,9 +15,6 @@
             </view>
         </view>
 
-        <view class="tip">
-            <text>拖动地图-加载地图中心点一千公里内的自驾线路</text>
-        </view>
 
     </view>
 

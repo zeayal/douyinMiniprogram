@@ -321,9 +321,7 @@ Page({
 
   onRegionChange(e: any) {
     const { type } = e.detail;
-    console.log('onRegionChange', e)
     if (type === "end") {
-      console.log('onRegionChange', e.detail)
       const { centerLocation, scale: newScale } = e.detail || {};
       if (!centerLocation) {
         return;
@@ -540,7 +538,7 @@ Page({
       // 根据平台设置padding值, 安卓上使用更大的值
       let paddingValue = 4;
       if (this.data.isIos) {
-        paddingValue = 0; // 
+        paddingValue = 2; // 
       }
       const isSelectedMarker = selectedMarkerId === markerId;
       const callout = {

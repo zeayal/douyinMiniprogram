@@ -1091,3 +1091,15 @@
   color: #adb5bd;
   margin-top: 10rpx;
 }
+
+.weui-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  padding: 20rpx;
+}
+
+.weui-cell {
+  display: flex;
+  gap: 10rpx;
+}

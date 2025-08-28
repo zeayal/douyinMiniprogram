@@ -1,8 +1,9 @@
 import { getLocationAsync, navigationToLocation } from "../../utils/gps";
 import { request } from "../../utils/http";
+import debounce from "../../utils/debounce";
 
-const SHARE_TITLE = "好友向您赠送了一份热门自驾线路攻略地图，点击查看！"
-const TAG = 'pages/tourRoutes/tourRoutes.ts';
+const SHARE_TITLE = "好友向您赠送了一份热门自驾线路攻略地图，点击查看！";
+const TAG = "pages/tourRoutes/tourRoutes.ts";
 const MARKER_ICON = {
   normal_star_0: "https://icons.unistar.icu/icons/normal_star.png",
   normal_star_1: "https://icons.unistar.icu/icons/normal_star.png",
@@ -23,10 +24,9 @@ const MARKER_ICON = {
 };
 
 // 在页面中定义激励视频广告
-let rewardedVideoAd: any = null
+let rewardedVideoAd: any = null;
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -35,44 +35,67 @@ Page({
     allMarkers: [],
     polylines: [],
     scale: 4,
+    lastMapScale: 4,
     currentGPSLocation: {},
     mapCenterLocation: {
       latitude: 29.65, // 默认展示布达拉宫定位，展示318
-      longitude: 91.12
-    }
+      longitude: 91.12,
+    },
   },
+
+  // 防抖后的查询方法（在 onLoad 中初始化）
+  getNearTourRoutesDebounced: () => { },
 
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad() {
     this.mapContext = tt.createMapContext("mapContext", this);
+    // 初始化请求防抖，避免地图交互频繁触发接口
+    this.getNearTourRoutesDebounced = debounce(
+      (location: { latitude: number; longitude: number }) => {
+        this.getNearTourRoutes(location);
+      },
+      400
+    );
     this.getCurrentLocationAndNextGetNearTourRoutes();
   },
 
   onShareAppMessage() {
     return {
       title: SHARE_TITLE,
-      path: 'pages/tourRoutes/tourRoutes?source=mp_weixin_pages_tourRoutes_onShareAppMessage'
+      path: "pages/tourRoutes/tourRoutes?source=mp_weixin_pages_tourRoutes_onShareAppMessage",
     };
   },
 
   onShareTimeline() {
     return {
       title: SHARE_TITLE,
-      path: 'pages/tourRoutes/tourRoutes?source=mp_weixin_pages_tourRoutes_onShareTimeline'
+      path: "pages/tourRoutes/tourRoutes?source=mp_weixin_pages_tourRoutes_onShareTimeline",
     };
   },
 
   // 地图变化
   onRegionChange(e: any) {
-    const { type, causedBy } = e;
+    const { type } = e.detail;
     if (type === "end") {
-      if (['scale', 'drag'].includes(causedBy)) {
-        const { centerLocation, scale: newScale } = e.detail;
-        const { latitude, longitude } = centerLocation;
-        // 检查权限，有权限才能继续请求
-        this.data.canAccessMoreRoutes && this.getNearTourRoutes({ latitude, longitude })
+      const { centerLocation, scale: newScale } = e.detail || {};
+      if (!centerLocation) return;
+      const { latitude, longitude } = centerLocation;
+      this.setData({
+        centerLocation: centerLocation,
+        latitude,
+        longitude,
+        scale: newScale,
+      });
+      // 判读是否是缩放地图, 如果是的话，不需要请求
+      const { lastMapScale } = this.data
+      if (Math.abs(lastMapScale - newScale) > 1) {
+        return
+      }
+      // 检查权限，有权限才能继续请求
+      if (this.data.canAccessMoreRoutes) {
+        this.getNearTourRoutesDebounced({ latitude, longitude });
       }
     }
   },
@@ -82,21 +105,21 @@ Page({
     try {
       this.setData({ loading: true });
       const res = await request({
-        url: '/api/tour-routes/oneHotTourRoute',
+        url: "/api/tour-routes/oneHotTourRoute",
         method: "GET",
-        data: {}
-      })
+        data: {},
+      });
       if (res.code === 0) {
         const routes = res.data || {};
         if (Array.isArray(routes)) {
           this.handleDataListToMarkerAndPolyline({ tourRoutes: routes });
           this.setData({
-            tourRoutes: routes
-          })
+            tourRoutes: routes,
+          });
         }
       }
     } catch (error) {
-      console.error('获取旅游线路失败', error);
+      console.error("获取旅游线路失败", error);
     }
   },
 
@@ -107,71 +130,69 @@ Page({
     this.setData({
       mapCenterLocation: {
         latitude,
-        longitude
+        longitude,
       },
       currentGPSLocation: {
         latitude,
-        longitude
-      }
+        longitude,
+      },
     });
 
-    this.getNearTourRoutes({ latitude, longitude })
+    this.getNearTourRoutes({ latitude, longitude });
   },
 
   // 获取附近1000公里的路线
-  async getNearTourRoutes(location: {
-    latitude: number;
-    longitude: number;
-  }) {
+  async getNearTourRoutes(location: { latitude: number; longitude: number }) {
     const { latitude, longitude } = location;
     try {
       if (latitude > 0 && longitude > 0) {
         this.setData({ loading: true });
         const res = await request({
-          url: '/api/tour-routes/nearbyAccess',
+          url: "/api/tour-routes/nearbyAccess",
           method: "GET",
-          data: { latitude, longitude }
-        })
+          data: { latitude, longitude },
+        });
         if (res.code === 0) {
-          const { userLimit, routes } = res.data || {};
+          const { userLimit, routes } = (res.data as any) || {};
           if (userLimit) {
-            const { isUnlocked } = userLimit
+            const { isUnlocked } = userLimit;
             this.setData({
-              canAccessMoreRoutes: isUnlocked
-            })
+              canAccessMoreRoutes: isUnlocked,
+            });
           }
           if (Array.isArray(routes)) {
             this.handleDataListToMarkerAndPolyline({ tourRoutes: routes });
             this.setData({
-              tourRoutes: routes
-            })
+              tourRoutes: routes,
+            });
           }
-
         }
       }
     } catch (error) {
-      console.error('获取旅游线路失败', error);
+      console.error("获取旅游线路失败", error);
     }
   },
 
-  handleDataListToMarkerAndPolyline({ tourRoutes }: { tourRoutes: [] }) {
+  handleDataListToMarkerAndPolyline({ tourRoutes }: { tourRoutes: any[] }) {
     if (Array.isArray(tourRoutes)) {
-      const routeLineMarkers = [];
+      const routeLineMarkers: any[] = [];
       tourRoutes.map((tourRoute: any) => {
         tourRoute.points.map((item: any) => {
-          const { name, longitude, latitude, markerId, showNameOnMap } = item
+          const { name, longitude, latitude, markerId, showNameOnMap } = item;
           routeLineMarkers.push({
-            callout: showNameOnMap ? {
-              content: name,
-              fontSize: 12,
-              display: 'ALWAYS',
-              padding: 1,
-              color: '#ffffff',
-              bgColor: tourRoute.color || '#1890ff', // 蓝色背景，区分旅游路线
-              borderRadius: 0,
-              borderWidth: 1,
-              borderColor: '#ffffff',
-            } : null,
+            callout: showNameOnMap
+              ? {
+                content: name,
+                fontSize: 12,
+                display: "ALWAYS",
+                padding: 1,
+                color: "#ffffff",
+                bgColor: tourRoute.color || "#1890ff", // 蓝色背景，区分旅游路线
+                borderRadius: 0,
+                borderWidth: 1,
+                borderColor: "#ffffff",
+              }
+              : null,
             alpha: 1,
             longitude,
             latitude,
@@ -182,80 +203,83 @@ Page({
             // 添加特殊标识，便于后续处理
             pointName: name,
             isRoutePoint: true,
-            routeType: 'tour'
-          })
-
-
-        })
-      })
+            routeType: "tour",
+          });
+        });
+      });
 
       // 为每条选中的线路创建polyline
-      const polylines = tourRoutes.map((route, index) => {
-        if (!route) return null;
-        // 生成正确的分段文本
-        const segmentTexts = [];
-        for (let i = 0; i < route.points.length - 1; i++) {
-          const name = route.name;
-          segmentTexts.push({
-            name: name,
-            startIndex: i,
-            endIndex: i + 1
-          });
-        }
-
-        return {
-          id: index,
-          points: route.points,
-          segmentTexts: segmentTexts,
-          color: route.color,
-          width: route.width,
-          arrowLine: true,
-          textStyle: {
-            textColor: '#ffffff',
-            strokeColor: '#000000',
-            fontSize: 22
+      const polylines = tourRoutes
+        .map((route: any, index: number) => {
+          if (!route) return null;
+          // 生成正确的分段文本
+          const segmentTexts: any[] = [];
+          for (let i = 0; i < route.points.length - 1; i++) {
+            const name = route.name;
+            segmentTexts.push({
+              name: name,
+              startIndex: i,
+              endIndex: i + 1,
+            });
           }
-        };
-      }).filter(Boolean); // 过滤掉null值
+
+          return {
+            id: index,
+            points: route.points,
+            segmentTexts: segmentTexts,
+            color: route.color,
+            width: route.width,
+            arrowLine: true,
+            textStyle: {
+              textColor: "#ffffff",
+              strokeColor: "#000000",
+              fontSize: 22,
+            },
+          };
+        })
+        .filter(Boolean); // 过滤掉null值
 
       this.setData({
         allMarkers: routeLineMarkers,
-        polylines
-      })
-
-    }
-  },
-
-  selectRoute(e: any) {
-    const routeId = e.currentTarget.dataset.routeid
-    // 如果有路线ID，跳转到详情页面
-    if (routeId) {
-      tt.navigateTo({
-        url: `/pages/routeDetail/routeDetail?id=${routeId}`
+        polylines,
       });
     }
   },
 
+  selectRoute(e: any) {
+    const routeId = e.currentTarget.dataset.routeid;
+    // 如果有路线ID，跳转到详情页面
+    if (routeId) {
+      tt.navigateTo({
+        url: `/pages/routeDetail/routeDetail?id=${routeId}`,
+      });
+    }
+  },
 
   // 点击地图上的标记点
   handleMarkertap: async function (e: any) {
     const markerId = e.markerId;
-    const clickedMarker = this.data.allMarkers.find((m) => m.id === markerId);
+    const clickedMarker = this.data.allMarkers.find(
+      (m: any) => m.id === markerId
+    );
     // 点击旅游线路标记点
-    const { latitude, longitude, pointName } = clickedMarker
-    navigationToLocation({ longitude, latitude, name: pointName }, this.mapContext);
+    const { latitude, longitude, pointName } = clickedMarker;
+    navigationToLocation(
+      { longitude, latitude, name: pointName },
+      this.mapContext
+    );
   },
 
   // 新增线路
   addRoute() {
     tt.navigateTo({
-      url: '/pages/addRoute/addRoute'
+      url: "/pages/addRoute/addRoute",
     });
   },
 
   // 点击当前定位
   handleClickCurrentLocation() {
-    this.getCurrentLocationAndNextGetNearTourRoutes()
+    this.getCurrentLocationAndNextGetNearTourRoutes();
   },
 
   // handlePolylinetap
@@ -265,9 +289,8 @@ Page({
     if (index >= 0) {
       const tourRoute = tourRoutes[index];
       tt.navigateTo({
-        url: `/pages/routeDetail/routeDetail?id=${tourRoute.id}`
+        url: `/pages/routeDetail/routeDetail?id=${tourRoute.id}`,
       });
     }
-  }
-
-})
+  },
+});
