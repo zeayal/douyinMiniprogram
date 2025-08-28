@@ -77,7 +77,7 @@ const wxloginGetBothToken = async (source?: string | null) => {
             } else {
               reject(new Error("登录失败: " + response.msg));
             }
-          } catch (error) {
+          } catch (error: any) {
             console.log("登录失败: ", error);
             reject(new Error("登录失败: " + error.message));
           }
@@ -86,7 +86,7 @@ const wxloginGetBothToken = async (source?: string | null) => {
           reject(new Error("登录失败: " + res.errMsg));
         }
       },
-      fail: (err) => {
+      fail: (err: any) => {
         console.error("微信登录失败:", err);
         reject(new Error("微信登录失败: " + err.errMsg));
       },
@@ -116,7 +116,7 @@ const refreshAccessToken = async (source?: string) => {
   }
 
   try {
-    refreshingPromise = new Promise(async (resolve, reject) => {
+    refreshingPromise = new Promise(async (resolve) => {
       try {
         const response: any = await new Promise((resolve, reject) => {
           tt.request({
