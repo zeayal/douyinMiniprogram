@@ -7,18 +7,18 @@
         "include": []
     },
     "setting": {
-        "coverView": true,
+        "urlCheck": true,
         "es6": true,
         "postcss": true,
         "minified": true,
-        "enhance": true,
-        "showShadowRootInWxmlPanel": true,
-        "packNpmRelationList": [],
-        "babelSetting": {
-            "ignore": [],
-            "disablePlugins": [],
-            "outputPath": ""
-        }
+        "newFeature": true,
+        "autoCompile": true,
+        "compileHotReLoad": true,
+        "nativeCompile": true,
+        "useCompilerPlugins": [
+            "typescript",
+            "sass"
+        ]
     },
     "condition": {},
     "editorSetting": {
@@ -30,5 +30,5 @@
         "packageJsonPath": "./package.json",
         "miniprogramNpmDistDir": "./miniprogram_npm/"
     }],
-    "douyinProjectType": "convert"
+    "douyinProjectType": "native"
 }

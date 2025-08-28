@@ -1,6 +1,7 @@
 {
     "setting": {
         "urlCheck": false,
-        "compileHotReLoad": true
+        "compileHotReLoad": true,
+        "nativeCompile": false
     }
 }
