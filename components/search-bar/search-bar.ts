@@ -27,9 +27,13 @@ Component({
       tt.chooseLocation({
         success: (res: any) => {
           console.log(TAG, 'tt.chooseLocation success', res)
-          const { name } = res;
-          this.setData({ searchQuery: name });
-          this.triggerEvent("chooseLocation", res);
+          const { name, address, latitude, longitude } = res;
+          this.setData({ searchQuery: name || address });
+          this.triggerEvent("chooseLocation", {
+            ...res,
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+          });
         },
         fail: (error) => {
           console.log(TAG, 'tt.chooseLocation fail', error)

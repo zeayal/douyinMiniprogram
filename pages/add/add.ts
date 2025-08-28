@@ -412,11 +412,11 @@ Page({
   // 选择位置
   chooseLocation() {
     tt.chooseLocation({
-      success: (res) => {
+      success: (res: any) => {
         const { name, latitude, longitude, address } = res || {};
         this.setData({
-          latitude,
-          longitude,
+          latitude: Number(latitude),
+          longitude: Number(longitude),
           address: name ? `${name}-${address}` : address,
         });
 

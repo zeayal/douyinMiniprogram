@@ -322,13 +322,19 @@ Page({
   onRegionChange(e: any) {
     const { type } = e.detail;
     console.log('onRegionChange', e)
-    const { centerLocation, scale: newScale } = e.detail;
-    const { latitude, longitude } = centerLocation;
-
     if (type === "end") {
       console.log('onRegionChange', e.detail)
-
-      this.setData({ centerLocation: centerLocation });
+      const { centerLocation, scale: newScale } = e.detail || {};
+      if (!centerLocation) {
+        return;
+      }
+      const { latitude, longitude } = centerLocation;
+      this.setData({
+        centerLocation: centerLocation,
+        latitude,
+        longitude,
+        scale: newScale,
+      });
       // 判读是否是缩放地图
       const { lastMapScale } = this.data
       console.log('lastMapScale', lastMapScale, newScale);

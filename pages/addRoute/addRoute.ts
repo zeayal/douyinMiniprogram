@@ -373,8 +373,8 @@ Page({
   // 选择位置
   selectLocation() {
     tt.chooseLocation({
-      success: (res) => {
-        const { name, address } = res;
+      success: (res: any) => {
+        const { name, address, latitude, longitude } = res;
         if (!this.data.editingWaypoint.name) {
           this.setData({
             'editingWaypoint.name': name,
@@ -382,16 +382,16 @@ Page({
         }
         this.setData({
           'editingWaypoint.address': address || name,
-          'editingWaypoint.latitude': res.latitude,
-          'editingWaypoint.longitude': res.longitude
+          'editingWaypoint.latitude': Number(latitude),
+          'editingWaypoint.longitude': Number(longitude)
         });
       },
-      fail: (err) => {
+      fail: (err: any) => {
         console.error('选择位置失败', err);
         if (err.errMsg.includes('auth deny')) {
           tt.showModal({
             title: '位置权限',
-            content: '需要获取您的位置权限，请在设置中开启',
+            content: '需要获取您的位置权限，请在小程序右上角设置中开启',
             showCancel: false
           });
         } else {
