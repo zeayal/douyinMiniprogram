@@ -370,13 +370,13 @@ export function openLocation(options: { latitude: number, longitude: number, nam
     longitude,
     name,
     success: async function (res: any) {
-      console.log('使用微信内置地图查看位置成功', res)
+      console.log('使用内置地图查看位置成功', res)
     },
     fail: function (err: any) {
-      console.error("使用微信内置地图查看位置失败", err);
+      console.error("使用内置地图查看位置失败", err);
     },
     complete: function (res: any) {
-      console.log('使用微信内置地图查看位置结束', res)
+      console.log('使用内置地图查看位置结束', res)
     },
   })
 }
@@ -397,7 +397,6 @@ export function getLocationAsync(options?: {
       success: (res: any) => {
         try {
           const { latitude: latitudeStr, longitude: longitudeStr } = res;
-          console.log('latitude, longitude', typeof latitudeStr, longitudeStr)
           const latitude = Number(latitudeStr);
           const longitude = Number(longitudeStr);
           tt.setStorage({ key: 'latitude', data: latitude });

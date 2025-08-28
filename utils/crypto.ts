@@ -1,5 +1,5 @@
 /**
- * 微信小程序 AES 加密工具（支持随机密钥生成）
+ *  AES 加密工具（支持随机密钥生成）
  */
 import CryptoJS from "crypto-js";
 import JSEncrypt from "./jsencrypt.min.js";
@@ -175,7 +175,7 @@ export const decryptWithAESCBC = (encryptedData: {
 };
 
 
-// 微信小程序兼容的 RSA 加密函数
+// 小程序兼容的 RSA 加密函数
 export const encryptDataWithServerRSA = (
   plaintext: string,
   publicKeyPem: any

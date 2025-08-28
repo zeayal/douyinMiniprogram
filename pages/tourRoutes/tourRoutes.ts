@@ -84,6 +84,7 @@ Page({
       const { latitude, longitude } = centerLocation;
       this.setData({
         centerLocation: centerLocation,
+        mapCenterLocation: centerLocation,
         latitude,
         longitude,
         scale: newScale,

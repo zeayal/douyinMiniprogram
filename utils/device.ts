@@ -141,7 +141,7 @@ export function getDeviceInfoSync() {
         system: deviceInfo.system,        // 操作系统版本
         platform: deviceInfo.platform,    // 客户端平台
         brand: deviceInfo.brand,          // 设备品牌
-        model: deviceInfo.model,          // 设备型号。新机型刚推出一段时间会显示unknown，微信会尽快进行适配。
+        model: deviceInfo.model,          // 设备型号。新机型刚推出一段时间会显示unknown
       };
     }
     return null

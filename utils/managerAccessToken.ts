@@ -9,7 +9,7 @@ let memoryCache: { token: string; expireTime: number } | undefined;
 // 存储刷新令牌的Promise，防止并发请求
 let refreshingPromise: Promise<void> | null = null;
 
-// 存储微信登录的Promise，防止并发请求
+// 存登录的Promise，防止并发请求
 let wxLoginPromise: Promise<void> | null = null;
 
 // access_token 是否有效
@@ -87,8 +87,8 @@ const wxloginGetBothToken = async (source?: string | null) => {
         }
       },
       fail: (err: any) => {
-        console.error("微信登录失败:", err);
-        reject(new Error("微信登录失败: " + err.errMsg));
+        console.error("登录失败:", err);
+        reject(new Error("登录失败: " + err.errMsg));
       },
     });
   });

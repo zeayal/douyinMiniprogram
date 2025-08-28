@@ -75,7 +75,7 @@
       <view class="section-title">支付信息</view>
       <view class="detail-item">
         <text class="detail-label">支付方式</text>
-        <text class="detail-value">微信支付</text>
+        <text class="detail-value">抖音支付</text>
       </view>
       <view class="detail-item">
         <text class="detail-label">实付金额</text>
