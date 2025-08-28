@@ -51,9 +51,10 @@ page {
   }
 
   .share-btn {
-    padding: 0;
+    padding: 6rpx;
     width: auto !important;
-    background: transparent;
+    background: #ffffffd2;
+    backdrop-filter: blur(2rpx);
     box-shadow: none;
     border: none;
   }

@@ -1,58 +1,58 @@
 <view class="container">
-  <search-bar bind:chooseLocation="handleChooseLocation" bind:onFilterTap="onFilterTap" filterType="{{filterType}}" />
-  <view class="map-area">
-    <map id="mapContext" style="width: 100vw; height: 100%;" scale="{{scale}}" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location show-scale bindregionchange="onRegionChange" bindmarkertap="handleMarkertap" bindcallouttap="handleMarkertap">
-    </map>
-    <!-- 中心点图标，绝对定位在地图中央 -->
-    <image class="center-marker" src="https://icons.unistar.icu/icons/center-marker.png" />
-  </view>
-  <!-- 按钮容器 -->
-  <view class="button-container" style="top: 250rpx">
-    <!-- 分享 -->
-    <view class="floating-button">
-      <button open-type="share" class="share-btn">
-        <view class="share-btn-content">
-          <image src="https://icons.unistar.icu/icons/share.png" class="icon"></image>
-          <view class="text">分享好友</view>
+    <search-bar bind:chooseLocation="handleChooseLocation" bind:onFilterTap="onFilterTap" filterType="{{filterType}}" />
+    <view class="map-area">
+        <map id="mapContext" style="width: 100vw; height: 100%;" scale="{{scale}}" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location show-scale bindregionchange="onRegionChange" bindmarkertap="handleMarkertap" bindcallouttap="handleMarkertap">
+        </map>
+        <!-- 中心点图标，绝对定位在地图中央 -->
+        <image class="center-marker" src="https://icons.unistar.icu/icons/center-marker.png" />
+    </view>
+    <!-- 按钮容器 -->
+    <view class="button-container" style="top: 250rpx">
+        <!-- 分享 -->
+
+        <button open-type="share" class="floating-button share-btn">
+            <view class="share-btn-content">
+                <image src="https://icons.unistar.icu/icons/share.png" class="icon"></image>
+                <view class="text">分享好友</view>
+            </view>
+        </button>
+
+
+        <view class="floating-button" bind:tap="navigateToMyFav">
+            <image src="https://icons.unistar.icu/icons/fav-list.png" class="icon"></image>
+            <view class="text">收藏列表</view>
         </view>
-      </button>
+
+        <view class="floating-button" bind:tap="scaleBigMap">
+            <image src='https://icons.unistar.icu/icons/big-scale.png' class="icon"></image>
+            <view class="text">放大地图</view>
+        </view>
+
+        <!-- 缩放营地 -->
+        <view class="floating-button" bind:tap="scaleSmallMap">
+            <image src='https://icons.unistar.icu/icons/scale.png' class="icon"></image>
+            <view class="text">缩小地图</view>
+        </view>
+
+        <!-- 当前定位 -->
+        <view class="floating-button" bind:tap="handleClickCurrentLocation">
+            <image src="https://icons.unistar.icu/icons/current-location.png" class="icon"></image>
+            <view class="text">当前定位</view>
+        </view>
+
+        <!-- 新增营地按钮 -->
+        <view class="floating-button" bind:tap="navigateToAdd">
+            <image src="https://icons.unistar.icu/icons/add.png" class="icon"></image>
+            <view class="text">新增营地</view>
+        </view>
+
     </view>
 
-    <view class="floating-button" bind:tap="navigateToMyFav">
-      <image src="https://icons.unistar.icu/icons/fav-list.png" class="icon"></image>
-      <view class="text">收藏列表</view>
-    </view>
 
-    <view class="floating-button" bind:tap="scaleBigMap">
-      <image src='https://icons.unistar.icu/icons/big-scale.png' class="icon"></image>
-      <view class="text">放大地图</view>
-    </view>
+    <!-- 使用精简详情卡片组件 -->
+    <spot-card showSpotCard="{{showSpotCard}}" selectedSpot="{{selectedSpot}}" isLoadingCoverImage="{{isLoadingCoverImage}}" bind:navigateToDetail="navigateToDetail" bind:navigateToSpot="navigateToSpot" selectedSpotId="{{selectedSpot.id}}" selectedSpotCoverImage="{{selectedSpotCoverImage}}" bind:closeSoptCard="handleCloseSoptCard"></spot-card>
 
-    <!-- 缩放营地 -->
-    <view class="floating-button" bind:tap="scaleSmallMap">
-      <image src='https://icons.unistar.icu/icons/scale.png' class="icon"></image>
-      <view class="text">缩小地图</view>
-    </view>
+    <!-- 自定义Toast组件 -->
+    <custom-toast id="customToast"></custom-toast>
 
-    <!-- 当前定位 -->
-    <view class="floating-button" bind:tap="handleClickCurrentLocation">
-      <image src="https://icons.unistar.icu/icons/current-location.png" class="icon"></image>
-      <view class="text">当前定位</view>
-    </view>
-
-    <!-- 新增营地按钮 -->
-    <view class="floating-button" bind:tap="navigateToAdd">
-      <image src="https://icons.unistar.icu/icons/add.png" class="icon"></image>
-      <view class="text">新增营地</view>
-    </view>
-
-  </view>
-
-
-  <!-- 使用精简详情卡片组件 -->
-  <spot-card showSpotCard="{{showSpotCard}}" selectedSpot="{{selectedSpot}}" isLoadingCoverImage="{{isLoadingCoverImage}}" bind:navigateToDetail="navigateToDetail" bind:navigateToSpot="navigateToSpot" selectedSpotId="{{selectedSpot.id}}" selectedSpotCoverImage="{{selectedSpotCoverImage}}" bind:closeSoptCard="handleCloseSoptCard"></spot-card>
-
-  <!-- 自定义Toast组件 -->
-  <custom-toast id="customToast"></custom-toast>
-  
 </view>
