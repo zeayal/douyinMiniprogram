@@ -7,7 +7,7 @@
 export const isSinglePageMode = (): boolean => {
   try {
     // 获取启动参数中的场景值
-    const launchOptions = wx.getLaunchOptionsSync();
+    const launchOptions = tt.getLaunchOptionsSync();
     return launchOptions.scene === 1154;
   } catch (error) {
     console.error('获取启动参数失败:', error);
@@ -20,7 +20,7 @@ export const isSinglePageMode = (): boolean => {
  */
 export const getCurrentScene = (): number => {
   try {
-    const launchOptions = wx.getLaunchOptionsSync();
+    const launchOptions = tt.getLaunchOptionsSync();
     return launchOptions.scene;
   } catch (error) {
     console.error('获取场景值失败:', error);
@@ -126,16 +126,15 @@ export function isAndroid(): boolean {
 
 /**
  * 获取详细的系统信息
- * 参考：https://developers.weixin.qq.com/miniprogram/dev/api/base/system/wx.getDeviceInfo.html
  * 
  */
 export function getDeviceInfoSync() {
   try {
     let deviceInfo = null;
-    if (wx.getDeviceInfo) {
-      deviceInfo = wx.getDeviceInfo()
+    if (tt.getDeviceInfo) {
+      deviceInfo = tt.getDeviceInfoSync()
     } else {
-      deviceInfo = wx.getSystemInfoSync ? wx.getSystemInfoSync() : null
+      deviceInfo = tt.getSystemInfoSync ? tt.getSystemInfoSync() : null
     }
     if (deviceInfo) {
       return {

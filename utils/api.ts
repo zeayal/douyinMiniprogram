@@ -32,7 +32,7 @@ export const getServerKeyExchangeApi = async () => {
 
 
   } catch (e) {
-    wx.showModal({
+    tt.showModal({
       title: '提示',
       content: "初始化失败，请在小程序右上角 -> 点击三个点菜单按钮 -> 点击重新进入小程序",
       icon: "none",

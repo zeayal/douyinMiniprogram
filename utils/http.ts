@@ -55,7 +55,7 @@ export const request = async <T>(options: {
         serverRSAPublicKey
       );
 
-      const task = wx.request({
+      const task = tt.request({
         enableHttp2: true,
         url: BASE_URL + url,
         data: {
@@ -67,7 +67,7 @@ export const request = async <T>(options: {
           "x-client-key": encryptPublicKeyWithServerRSA,
           "x-supports-gzip": "true",
           Authorization: `Bearer ${accessToken}`,
-          platform: "mp-weixin",
+          platform: "mp-toutiao",
           ...headers,
         },
         success: async (res: any) => {
@@ -117,7 +117,7 @@ export const request = async <T>(options: {
               reject(error);
             }
           } else {
-            wx.showToast({
+            tt.showToast({
               title: res.data.msg,
               icon: "none",
               duration: 3000,
@@ -125,7 +125,7 @@ export const request = async <T>(options: {
             resolve(res.data);
           }
         },
-        fail: (err) => {
+        fail: (err: any) => {
           if (err.errMsg === "request:fail abort") {
             return;
           }
@@ -162,14 +162,14 @@ export const requestNormal = async <T>(options: {
       requestTasks[requestKey].abort();
     }
     return new Promise(async (resolve, reject) => {
-      const task = wx.request({
+      const task = tt.request({
         enableHttp2: true,
         url: BASE_URL + url,
         data: data,
         method,
         header: {
           "Content-Type": "application/json",
-          platform: "mp-weixin",
+          platform: "mp-toutiao",
           ...headers,
         },
         success: async (res: any) => {

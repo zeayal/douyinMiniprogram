@@ -45,19 +45,19 @@ const wxloginGetBothToken = async (source?: string | null) => {
   }
 
   wxLoginPromise = new Promise((resolve, reject) => {
-    wx.login({
+    tt.login({
       success: async (res: any) => {
         if (res.code) {
           try {
             const response: any = await new Promise((resolve, reject) => {
-              wx.request({
+              tt.request({
                 enableHttp2: true,
                 url: BASE_URL + "/api/auth/wxLogin",
                 method: "GET",
                 data: { code: res.code, source },
                 header: {
                   "Content-Type": "application/json",
-                  platform: "mp-weixin",
+                  platform: "mp-toutiao",
                 },
                 success: (res: any) => resolve(res.data),
                 fail: reject,
@@ -75,28 +75,31 @@ const wxloginGetBothToken = async (source?: string | null) => {
               storage.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
               resolve(accessToken);
             } else {
-              reject("登录失败");
+              reject(new Error("登录失败: " + response.msg));
             }
           } catch (error) {
             console.log("登录失败: ", error);
-            reject("登录失败");
+            reject(new Error("登录失败: " + error.message));
           }
         } else {
           console.log("登录失败！" + res.errMsg);
-          reject("登录失败");
+          reject(new Error("登录失败: " + res.errMsg));
         }
       },
       fail: (err) => {
         console.error("微信登录失败:", err);
-        reject(err);
+        reject(new Error("微信登录失败: " + err.errMsg));
       },
     });
   });
 
   try {
     return await wxLoginPromise;
+  } catch (error) {
+    console.error("wxloginGetBothToken 捕获错误:", error);
+    throw error; // 重新抛出错误，由调用者处理
   } finally {
-    refreshingPromise = null;
+    wxLoginPromise = null;
   }
 };
 
@@ -116,14 +119,14 @@ const refreshAccessToken = async (source?: string) => {
     refreshingPromise = new Promise(async (resolve, reject) => {
       try {
         const response: any = await new Promise((resolve, reject) => {
-          wx.request({
+          tt.request({
             enableHttp2: true,
             url: BASE_URL + "/api/auth/refreshToken",
             method: "GET",
             data: { refreshToken },
             header: {
               "Content-Type": "application/json",
-              platform: "mp-weixin",
+              platform: "mp-toutiao",
             },
             success: (res: any) => resolve(res.data),
             fail: reject,

@@ -364,9 +364,8 @@ export function navigationToLocation(location: { latitude: number, longitude: nu
  * @param name 
  */
 export function openLocation(options: { latitude: number, longitude: number, name: string }) {
-  // https://developers.weixin.qq.com/miniprogram/dev/api/location/wx.openLocation.html
   const { latitude, longitude, name } = options;
-  wx.openLocation({
+  tt.openLocation({
     latitude,
     longitude,
     name,
@@ -392,15 +391,15 @@ export function getLocationAsync(options?: {
     latitude: number,
     longitude: number,
   }>((resolve, reject) => {
-    wx.getLocation({
+    tt.getLocation({
       type: "gcj02",
       isHighAccuracy: true,
       success: (res) => {
 
         try {
           const { latitude, longitude } = res;
-          wx.setStorage({ key: 'latitude', data: latitude });
-          wx.setStorage({ key: 'longitude', data: longitude });
+          tt.setStorage({ key: 'latitude', data: latitude });
+          tt.setStorage({ key: 'longitude', data: longitude });
         } catch (e) {
           console.error('异步：获取当前定位 setStorage Error', e);
         }
@@ -418,7 +417,7 @@ export function getLocationAsync(options?: {
 }
 
 export function showGPSLocationFailTip() {
-  wx.showModal({
+  tt.showModal({
     title: `定位失败提示`,
     content: '请在小程序右上角三个点设置中允许获取当前位置 / 或者检查网络状态',
     showCancel: false,

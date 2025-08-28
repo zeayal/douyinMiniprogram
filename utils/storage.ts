@@ -5,40 +5,59 @@
 const storage = {
   // 基础存储方法
   getItem(key: string) {
-    return wx.getStorageSync(key);
+    return tt.getStorageSync(key);
   },
 
-  async getItemAsync(key: string, options?: any) {
-    try {
-      const res: any = await wx.getStorage({
+  async getItemAsync(key: string) {
+    return new Promise((resolve) => {
+      tt.getStorage({
         key,
-        ...options
+        success: (res: any) => {
+          resolve(res.data)
+        },
+        fail: (error: any) => {
+          console.log('getItemAsyncError key:', key, error)
+          resolve(undefined)
+        },
+        complete: () => {
+
+        }
       })
-      return res.data;
-    } catch (error) {
-      console.log('getItemAsyncError key:', key, error)
-      return undefined
-    };
+    })
   },
 
   setItem(key: string, value: any) {
-    wx.setStorageSync(key, value);
+    tt.setStorageSync(key, value);
   },
 
-  async setItemAsync(key: string, value: any, options?: any) {
-    try {
-      await wx.setStorage({ key, data: value, ...options });
-    } catch (e) {
-      console.log('setItemAsyncError key: value:', key, value, e)
-    }
+  async setItemAsync(key: string, value: any) {
+    return new Promise((resolve) => {
+      tt.setStorage({
+        key: key,
+        data: value,
+        success: () => {
+          resolve(true);
+        },
+        fail: (e: any) => {
+          console.log('setItemAsyncError key: value:', key, value, e)
+        },
+        complete: () => {
+          console.log('setItemAsync:complete');
+        }
+      });
+    })
+
+
+
+
   },
 
   removeItem(key: string) {
-    wx.removeStorageSync(key);
+    tt.removeStorageSync(key);
   },
 
   clearStorage() {
-    wx.clearStorageSync();
+    tt.clearStorageSync();
   }
 }
 

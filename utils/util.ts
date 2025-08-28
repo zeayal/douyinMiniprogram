@@ -48,7 +48,7 @@ export const checkIsVip = (tag = "") => {
     return true;
   }
 
-  wx.showToast({
+  tt.showToast({
     title: isIOS()
       ? `赶快购买实物车贴获取${tag}功能吧`
       : `赶快成为会员用户获取${tag}功能吧`,
@@ -57,7 +57,7 @@ export const checkIsVip = (tag = "") => {
   });
 
   setTimeout(() => {
-    wx.navigateTo({
+    tt.navigateTo({
       url: "/pages/vip/vip",
     });
   }, 2000);

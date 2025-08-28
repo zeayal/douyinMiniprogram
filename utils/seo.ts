@@ -192,12 +192,12 @@ export class SEOUtils {
    */
   static setPageMeta(title: string, description: string, keywords: string) {
     // 设置导航栏标题
-    wx.setNavigationBarTitle({
+    tt.setNavigationBarTitle({
       title: title
     });
 
     // 设置分享信息
-    wx.showShareMenu({
+    tt.showShareMenu({
       withShareTicket: true,
       menus: ['shareAppMessage', 'shareTimeline']
     });
