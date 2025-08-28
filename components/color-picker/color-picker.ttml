@@ -1,0 +1,143 @@
+<view class="color-picker-overlay" tt:if="{{show}}" bindtap="close">
+  <view class="color-picker-modal" catchtap="stopPropagation">
+    <!-- 头部 -->
+    <view class="color-picker-header">
+      <text class="header-title">选择颜色</text>
+      <view class="header-actions">
+        <view class="action-btn" bindtap="toggleAdvanced">
+          {{showAdvanced ? '基础' : '高级'}}
+        </view>
+        <view class="close-btn" bindtap="close">×</view>
+      </view>
+    </view>
+
+    <!-- 当前颜色预览 -->
+    <view class="current-color-section">
+      <view class="color-preview">
+        <view class="preview-circle" style="background-color: {{selectedColor}}">
+          <view class="preview-check">✓</view>
+        </view>
+        <view class="preview-info">
+          <text class="preview-hex">{{selectedColor}}</text>
+          <text class="preview-hsv">H:{{hsvColor.h}}° S:{{hsvColor.s}}% V:{{hsvColor.v}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 预设颜色 -->
+    <view class="preset-colors-section">
+      <text class="section-title">预设颜色</text>
+      <view class="preset-grid">
+        <view tt:for="{{presetColors}}" tt:key="index" class="preset-color {{selectedColor === item ? 'selected' : ''}}" style="background-color: {{item}}" data-color="{{item}}" bindtap="selectPresetColor">
+          <view class="color-check" tt:if="{{selectedColor === item}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 颜色分类 -->
+    <view class="color-categories-section">
+      <text class="section-title">颜色分类</text>
+      <view class="category-tabs">
+        <view tt:for="{{colorCategories}}" tt:key="name" class="category-tab {{activeCategory === item.name ? 'active' : ''}}" data-category="{{item.name}}" bindtap="selectCategory">
+          {{item.label}}
+        </view>
+      </view>
+      <view class="category-colors">
+        <view tt:for="{{activeCategoryColors}}" tt:key="index" class="category-color {{selectedColor === item ? 'selected' : ''}}" style="background-color: {{item}}" data-color="{{item}}" bindtap="selectCategoryColor">
+          <view class="color-check" tt:if="{{selectedColor === item}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 高级模式 -->
+    <view class="advanced-section" tt:if="{{showAdvanced}}">
+      <!-- HSV选择器 -->
+      <view class="hsv-section">
+        <text class="section-title">HSV颜色选择</text>
+        
+        <!-- 色相选择器 -->
+        <view class="hue-picker">
+          <view class="picker-header">
+            <text class="picker-label">色相 (H)</text>
+            <text class="picker-value">{{hsvColor.h}}°</text>
+          </view>
+          <view class="hue-slider-container">
+            <slider class="hue-slider" min="0" max="360" value="{{hsvColor.h}}" bindchange="onHueChange" active-color="transparent" background-color="transparent" />
+            <view class="hue-gradient"></view>
+          </view>
+        </view>
+        
+        <!-- 饱和度选择器 -->
+        <view class="saturation-picker">
+          <view class="picker-header">
+            <text class="picker-label">饱和度 (S)</text>
+            <text class="picker-value">{{hsvColor.s}}%</text>
+          </view>
+          <view class="saturation-slider-container">
+            <slider class="saturation-slider" min="0" max="100" value="{{hsvColor.s}}" bindchange="onSaturationChange" active-color="transparent" background-color="transparent" />
+            <view class="saturation-gradient" style="background: linear-gradient(to right, #ccc, hsl({{hsvColor.h}}, 100%, 50%))"></view>
+          </view>
+        </view>
+        
+        <!-- 明度选择器 -->
+        <view class="value-picker">
+          <view class="picker-header">
+            <text class="picker-label">明度 (V)</text>
+            <text class="picker-value">{{hsvColor.v}}%</text>
+          </view>
+          <view class="value-slider-container">
+            <slider class="value-slider" min="0" max="100" value="{{hsvColor.v}}" bindchange="onValueChange" active-color="transparent" background-color="transparent" />
+            <view class="value-gradient" style="background: linear-gradient(to right, #000, hsl({{hsvColor.h}}, {{hsvColor.s}}%, 50%), #fff)"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 十六进制输入 -->
+      <view class="hex-input-section">
+        <text class="section-title">十六进制</text>
+        <view class="hex-input-group">
+          <text class="input-prefix">#</text>
+          <input class="hex-input" placeholder="000000" value="{{hexInput}}" bindinput="onHexInput" maxlength="6" />
+          <view class="apply-btn" bindtap="applyHexColor">应用</view>
+        </view>
+        <text class="input-hint">支持3位或6位十六进制颜色值</text>
+      </view>
+
+      <!-- RGB输入 -->
+      <view class="rgb-input-section">
+        <text class="section-title">RGB值</text>
+        <view class="rgb-inputs">
+          <view class="rgb-input-group">
+            <text class="rgb-label">R</text>
+            <input class="rgb-input" type="number" min="0" max="255" value="{{rgbInput.r}}" data-field="r" bindinput="onRgbInput" />
+          </view>
+          <view class="rgb-input-group">
+            <text class="rgb-label">G</text>
+            <input class="rgb-input" type="number" min="0" max="255" value="{{rgbInput.g}}" data-field="g" bindinput="onRgbInput" />
+          </view>
+          <view class="rgb-input-group">
+            <text class="rgb-label">B</text>
+            <input class="rgb-input" type="number" min="0" max="255" value="{{rgbInput.b}}" data-field="b" bindinput="onRgbInput" />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 历史记录 -->
+    <view class="history-section" tt:if="{{colorHistory.length > 0}}">
+      <text class="section-title">最近使用</text>
+      <view class="history-grid">
+        <view tt:for="{{colorHistory}}" tt:key="index" class="history-color {{selectedColor === item ? 'selected' : ''}}" style="background-color: {{item}}" data-color="{{item}}" bindtap="selectPresetColor">
+          <view class="color-check" tt:if="{{selectedColor === item}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作按钮 -->
+    <view class="color-picker-footer">
+      <view class="footer-actions">
+        <view class="confirm-btn" bindtap="confirm">确认</view>
+      </view>
+    </view>
+  </view>
+</view>

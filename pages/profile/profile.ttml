@@ -1,0 +1,97 @@
+<view>
+  <!-- <skeleton wx:if="{{isLoading}}"></skeleton> -->
+  <view class="container">
+    <!-- SEO友好的隐藏关键词 -->
+    <view class="seo-keywords" aria-hidden="true">
+      <span>
+        个人中心 户外露营 房车营地 自驾攻略 床车露营 野营 帐篷露营 户外装备 露营用品 自驾游 房车旅游 露营基地 营地设施 免费营地 户外运动 旅游攻略 户外 旅游 自驾 房车 露营 床车 自驾游攻略 露营攻略 户外用品 露营装备 新手露营 露营指南 营地推荐 营地查询 营地导航 营地评价 营地设施 营地服务 营地管理 营地运营 营地经营 营地投资 营地建设 营地规划 营地设计 营地装修 营地改造 营地升级 营地维护 营地保养 营地清洁 营地安全 营地环保 营地生态 营地文化 营地历史 营地故事 营地传说 营地神话 营地传说 营地故事 营地历史 营地文化 营地生态 营地环保 营地安全 营地清洁 营地保养 营地维护 营地升级 营地改造 营地装修 营地设计 营地规划 营地建设 营地投资 营地经营 营地运营 营地管理 营地服务 营地评价 营地导航 营地查询 营地推荐 露营指南 新手露营 露营装备 户外用品 露营攻略 自驾游攻略 床车 露营 房车 自驾 旅游 户外
+      </span>
+    </view>
+    <!-- 用户信息部分 -->
+    <view class="user-info-card">
+      <view class="user-header">
+        <!-- 用户头像 -->
+        <image src="https://icons.unistar.icu/icons/user.png" class="user-icon"></image>
+        <!-- 用户名 -->
+        <view class="user-info">
+          <text class="user-name">{{userInfo.nickname || '露营者'}}</text>
+          <text class="user-vip">{{ userInfo.nickname ? '普通用户' : ''}}</text>
+          <!-- <text class="user-vip">{{ userInfo.isVip ? "会员用户 到期时间：" + userInfo.membershipExpiresAt : "普通用户"}}</text> -->
+        </view>
+        <!-- 用户资料 -->
+        <!-- <view class="user-details">
+        <text class="detail-text">完善个人资料</text>
+      </view> -->
+      </view>
+    </view>
+    <!-- 功能图标区域 -->
+    <view class="function-grid">
+      <view class="grid-row">
+        <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="collection">
+          <view class="icon-wrapper">
+            <image class="func-icon" src="https://icons.unistar.icu/icons/collect.png"></image>
+          </view>
+          <text class="func-name">我的收藏</text>
+        </view>
+        <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="checkin">
+          <view class="icon-wrapper">
+            <image class="func-icon" src="https://icons.unistar.icu/icons/like.png"></image>
+          </view>
+          <text class="func-name">我的打卡</text>
+        </view>
+        <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="camp">
+          <view class="icon-wrapper">
+            <image class="func-icon" src="https://icons.unistar.icu/icons/camp.png"></image>
+          </view>
+          <text class="func-name">我的营地</text>
+        </view>
+        <view class="grid-item" bindtap="handleMenuTap" data-type="addCamp">
+          <view class="icon-wrapper">
+            <image class="func-icon" src="https://icons.unistar.icu/icons/add.png"></image>
+          </view>
+          <text class="func-name">新增营地</text>
+        </view>
+      </view>
+    </view>
+    <!-- <view class="vip-card" bindtap="handleBuyVip" wx:if="{{!userInfo.isVip}}">
+      <view class="vip-left">
+        <image class="crown-icon" src="https://icons.unistar.icu/icons/VIP.png"></image>
+        <text class="vip-text">{{isIos ? '购买实物车贴' : '成为会员 尊享更多'}}</text>
+      </view>
+      <view class="vip-btn">立即购买</view>
+    </view> -->
+    <!-- 菜单列表 -->
+    <view class="menu-list">
+      <view class="menu-item" bindtap="navigateToFaq" data-type="order">
+        <view class="menu-left">
+          <text class="menu-text">常见问题</text>
+        </view>
+        <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
+      </view>
+      <view class="menu-item" bindtap="handleMenuTapItem" data-type="feedback">
+        <view class="menu-left">
+          <text class="menu-text">意见反馈</text>
+        </view>
+        <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
+      </view>
+      <view class="menu-item" bindtap="handleMenuTapItem" data-type="order">
+        <view class="menu-left">
+          <text class="menu-text">我的订单</text>
+        </view>
+        <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
+      </view>
+      <view class="menu-item" bindtap="handleMenuTapItem" data-type="about">
+        <view class="menu-left">
+          <text class="menu-text">关于我们</text>
+        </view>
+        <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
+      </view>
+    </view>
+    <!-- 隐藏的SEO关键词区域 -->
+    <view class="seo-keywords" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;">
+      <text>
+        个人中心 户外露营 房车营地 自驾攻略 床车露营 野营 帐篷露营 户外装备 露营用品 自驾游 房车旅游 露营基地 营地设施 免费营地 户外运动 旅游攻略 户外 旅游 自驾 房车 露营 床车 自驾游攻略 露营攻略 户外用品 露营装备 新手露营 露营指南 营地推荐 营地查询 营地导航 营地评价 营地设施 营地服务 营地管理 营地运营 营地经营 营地投资 营地建设 营地规划 营地设计 营地装修 营地改造 营地升级 营地维护 营地保养 营地清洁 营地安全 营地环保 营地生态 营地文化 营地历史 营地故事 营地传说 营地神话 营地传说 营地故事 营地历史 营地文化 营地生态 营地环保 营地安全 营地清洁 营地保养 营地维护 营地升级 营地改造 营地装修 营地设计 营地规划 营地建设 营地投资 营地经营 营地运营 营地管理 营地服务 营地评价 营地导航 营地查询 营地推荐 露营指南 新手露营 露营装备 户外用品 露营攻略 自驾游攻略 床车 露营 房车 自驾 旅游 户外
+      </text>
+    </view>
+  </view>
+</view>

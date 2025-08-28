@@ -1,0 +1,95 @@
+/* pages/orderDetail/orderDetail.wxss */
+
+page {
+    background-color: #f8f8f8;
+}
+
+.container {
+    padding: 20rpx;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.detail-card {
+    background-color: #fff;
+    border-radius: 16rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    margin-bottom: 20rpx;
+    padding: 30rpx;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15rpx 0;
+    border-bottom: 1rpx solid #eee;
+}
+
+.detail-item-tite-image {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 28rpx;
+    color: #666;
+}
+
+.detail-value {
+    font-size: 28rpx;
+    color: #333;
+    font-weight: bold;
+    text-align: right;
+}
+
+.detail-value.status-paid {
+    color: #07c160;
+}
+
+.detail-value.status-unpaid {
+    color: #ff5c5c;
+}
+
+.section-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20rpx;
+}
+
+.order-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10rpx;
+}
+
+.order-comment {
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 20rpx;
+}
+
+.order-price-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+}
+
+.currency {
+    font-size: 32rpx;
+    color: #333;
+    margin-right: 4rpx;
+}
+
+.price {
+    font-size: 64rpx;
+    font-weight: bold;
+    color: #333;
+}

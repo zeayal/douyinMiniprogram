@@ -1,0 +1,11 @@
+{
+    "desc": "户外、旅游、自驾、床车、房车免费露营地，自驾攻略、房车露营、自驾游、露营攻略。最懂营地，免费露营地查询",
+    "rules": [{
+        "page": "pages/detail/detail",
+        "params": ["id"],
+        "matching": "inclusive"
+    }, {
+        "action": "allow",
+        "page": "*"
+    }]
+}

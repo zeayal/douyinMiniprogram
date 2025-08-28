@@ -1,0 +1,2 @@
+"use strict";const adler32=(e,r,t,l)=>{let o=65535&e|0,d=e>>>16&65535|0,s=0;for(;0!==t;){s=t>2e3?2e3:t,t-=s;do{o=o+r[l++]|0,d=d+o|0}while(--s);o%=65521,d%=65521}return o|d<<16|0};module.exports=adler32;
+//# sourceMappingURL=adler32.js.map

@@ -1,0 +1,2 @@
+"use strict";const _has=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);module.exports.assign=function(t){const e=Array.prototype.slice.call(arguments,1);for(;e.length;){const o=e.shift();if(o){if("object"!=typeof o)throw new TypeError(o+"must be non-object");for(const e in o)_has(o,e)&&(t[e]=o[e])}}return t},module.exports.flattenChunks=t=>{let e=0;for(let o=0,n=t.length;o<n;o++)e+=t[o].length;const o=new Uint8Array(e);for(let e=0,n=0,r=t.length;e<r;e++){let r=t[e];o.set(r,n),n+=r.length}return o};
+//# sourceMappingURL=common.js.map

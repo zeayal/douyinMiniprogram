@@ -1,0 +1,205 @@
+/* pages/index/index.scss */
+page {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100vw;
+}
+
+.container {
+  overflow: hidden;
+}
+
+
+// 按钮容器
+.button-container {
+  position: fixed;
+  right: 10rpx;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  pointer-events: auto;
+  background: transparent;
+
+  // 统一按钮样式
+  .floating-button {
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffffd2;
+    backdrop-filter: blur(2rpx);
+    color: black;
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    transition: transform 0.2s;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    .icon {
+      width: 32rpx;
+      height: 32rpx;
+    }
+
+    .text {
+      font-size: 24rpx;
+    }
+  }
+
+  .share-btn {
+    padding: 0;
+    width: auto !important;
+    background: transparent;
+  }
+
+  .share-btn-content {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+
+}
+
+.map-area {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 120rpx);
+  margin: 0;
+  padding: 0;
+}
+
+.center-marker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 40px;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+// 旅游线路样式
+.tour-routes-container {
+  margin-top: 10rpx;
+  padding: 20rpx;
+  background: #ffffffd2;
+  backdrop-filter: blur(2rpx);
+  border-radius: 16rpx;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tour-routes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.tour-routes-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.tour-routes-controls {
+  display: flex;
+  gap: 16rpx;
+}
+
+.route-control-btn {
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 20rpx;
+  line-height: 1;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.tour-routes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.route-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.active {
+    border-color: var(--primary-color);
+    background: #e8f5e8;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+  }
+}
+
+.route-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.route-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.route-description {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.route-color-indicator {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  border: 2rpx solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.selection-indicator {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-left: 16rpx;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+// 热门线路相关样式（已移至组件中）
+// 保留浮动按钮样式

@@ -1,0 +1,1 @@
+{"navigationBarTitleText":"我的收藏","backgroundTextStyle":"dark","enablePullDownRefresh":true,"onReachBottomDistance":100,"usingComponents":{"my-spot-card":"../../components/my-spot-card/my-spot-card","skeleton":"../../components/skeleton/skeleton"}}

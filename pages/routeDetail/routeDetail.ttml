@@ -1,0 +1,73 @@
+<view class="route-detail-container">
+  <!-- 路线基本信息 -->
+  <view class="route-header" style="background-color: {{routeDetail.color}};">
+    <view class="route-title-section">
+      <text class="route-name">{{routeDetail.name}}</text>
+    </view>
+    <text class="route-description">{{routeDetail.description}}</text>
+  </view>
+
+
+  <!-- 途经点列表 -->
+  <view class="points-section">
+    <view class="section-title">
+      <text>途经点</text>
+    </view>
+    <view class="points-list">
+      <view tt:for="{{routeDetail.points}}" tt:key="index" class="point-item" bind:tap="handleTapPointItem" data-pointid="{{item.id}}">
+        <view class="point-index" style="background-color: {{routeDetail.color}};">{{index + 1}}</view>
+        <view class="point-info">
+          <view class="point-name">{{item.name || '途经点' + (index + 1)}}</view>
+          <view class="point-address">
+            {{item.address || '坐标: ' + item.latitude + ', ' + item.longitude}}
+          </view>
+        </view>
+        <view class="point-arrow">
+          <image src="https://icons.unistar.icu/icons/arrow_r.png" mode="aspectFit" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 路线地图预览 -->
+  <view class="map-section">
+    <view class="section-title">
+      <text>路线预览</text>
+    </view>
+    <view class="map-container">
+      <map id="mapContext" class="route-detail-map" scale="{{mapScale}}" latitude="{{mapCenter.latitude}}" longitude="{{mapCenter.longitude}}" markers="{{routeMarkers}}" polyline="{{routePolyline}}" show-location show-scale enable-rotate="{{false}}" enable-overlooking="{{false}}" bindmarkertap="onMarkerTap" bindcallouttap="onMarkerTap"></map>
+    </view>
+    <view class="map-controls">
+      <view class="map-control-btn" bindtap="zoomInMap">
+        <image src="https://icons.unistar.icu/icons/big-scale.png" class="control-icon"></image>
+        <text>放大</text>
+      </view>
+      <view class="map-control-btn" bindtap="zoomOutMap">
+        <image src="https://icons.unistar.icu/icons/scale.png" class="control-icon"></image>
+        <text>缩小</text>
+      </view>
+      <view class="map-control-btn" bindtap="resetMapView">
+        <image src="https://icons.unistar.icu/icons/reset.png" class="control-icon"></image>
+        <text>重置视图</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 申请修改路线按钮 -->
+  <view class="edit-route-btn-container">
+    <view class="edit-route-btn" style="background-color: {{routeDetail.color}};" bindtap="onEditRoute">
+      <text>申请修改路线</text>
+    </view>
+  </view>
+
+
+  <!-- 加载状态 -->
+  <view tt:if="{{loading}}" class="loading-container">
+    <text>加载中...</text>
+  </view>
+  <!-- 错误状态 -->
+  <view tt:if="{{error}}" class="error-container">
+    <text>{{error}}</text>
+    <button class="retry-btn" bindtap="onRetry">重试</button>
+  </view>
+</view>

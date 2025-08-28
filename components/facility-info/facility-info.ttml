@@ -1,0 +1,79 @@
+<!-- components/facility-info/facility-info.wxml -->
+<view class="info-icon" bindtap="showModal">❓</view>
+
+<!-- 模态弹框 -->
+<view class="modal-overlay {{visible ? 'show' : ''}}" bindtap="hideModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">便利设施说明</text>
+      <view class="close-btn" bindtap="hideModal">×</view>
+    </view>
+    
+    <view class="modal-body">
+      <view class="table-container">
+        <view class="table-header">
+          <view class="table-cell header">便利设施</view>
+          <view class="table-cell header">使用场景</view>
+          <view class="table-cell header">用户群体</view>
+          <view class="table-cell header">覆盖度</view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">商超</view>
+          <view class="table-cell">购物补给、日常用品</view>
+          <view class="table-cell">所有用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 90%;"></view>
+            </view>
+            <text class="coverage-text">90%+</text>
+          </view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">公共厕所</view>
+          <view class="table-cell">如厕需求、卫生设施</view>
+          <view class="table-cell">所有用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 85%;"></view>
+            </view>
+            <text class="coverage-text">85%+</text>
+          </view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">菜市场</view>
+          <view class="table-cell">食材采购、新鲜蔬菜</view>
+          <view class="table-cell">长期停留用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 70%;"></view>
+            </view>
+            <text class="coverage-text">70%+</text>
+          </view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">夜市美食</view>
+          <view class="table-cell">餐饮需求、特色美食</view>
+          <view class="table-cell">美食爱好者</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 60%;"></view>
+            </view>
+            <text class="coverage-text">60%+</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="tips">
+        <view class="tip-title">💡 选择建议：</view>
+        <view class="tip-item">• 选择最主要的便利设施，便于用户筛选和查找</view>
+        <view class="tip-item">• 商超适合日常补给，公共厕所适合基本需求</view>
+        <view class="tip-item">• 菜市场适合长期停留，夜市美食适合特色体验</view>
+        <view class="tip-item">• 根据设施的主要功能和特色选择对应类型</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,200 @@
+<view class="add-route-container">
+  <!-- 线路基本信息 -->
+  <view class="route-info-section">
+    <view class="section-title">{{isEditMode ? '编辑线路信息' : '线路基本信息'}}</view>
+    <view class="input-group">
+      <view class="label">
+        <text>线路名称</text>
+        <text class="required">*</text>
+        <view class="input-counter">（当前输入字数：{{routeName.length}}/30</view>
+      </view>
+      <input class="input" placeholder="请输入线路名称" value="{{routeName}}" bindinput="onRouteNameInput" />
+    </view>
+
+    <view class="input-group">
+      <view class="label">
+        <text>线路描述</text>
+        <text class="required">*</text>
+        <view class="input-counter">（当前输入字数：{{routeDescription.length}}/500）</view>
+      </view>
+      <textarea class="textarea" maxlength="500" placeholder="请输入线路描述，最长500字" value="{{routeDescription}}" bindinput="onRouteDescriptionInput" />
+    </view>
+  </view>
+
+  <view class="route-width">
+    <view class="section-title">线路类型</view>
+    <radio-group bindchange="handleRouteWidthChange">
+      <label class="weui-cell weui-check__label" tt:for="{{routeWidthItems}}" tt:key="{{item.value}}">
+        <view class="weui-cell__hd">
+          <radio value="{{item.value}}" checked="{{width === item.value}}" />
+        </view>
+        <view class="weui-cell__bd">{{item.name}}</view>
+      </label>
+    </radio-group>
+  </view>
+
+  <!-- 线路颜色选择 -->
+  <view class="color-section">
+    <view class="section-title">线路颜色</view>
+    <!-- 当前选中的颜色预览 -->
+    <view class="current-color-preview">
+      <view class="color-preview-circle" style="background-color: {{selectedColor}}">
+        <view class="color-preview-check" tt:if="{{selectedColor}}">✓</view>
+      </view>
+      <text class="color-preview-text">{{selectedColor}}</text>
+      <view class="color-picker-trigger" bindtap="showColorPicker">点击选择颜色</view>
+    </view>
+    <!-- 快速颜色选择 -->
+    <view class="quick-colors">
+      <text class="input-label">快速选择</text>
+      <view class="quick-color-grid">
+        <view tt:for="{{quickColors}}" tt:key="index" class="quick-color-item" style="background-color: {{item}}" data-color="{{item}}" bindtap="selectQuickColor"></view>
+      </view>
+    </view>
+  </view>
+  <!-- 颜色选择器组件 -->
+  <color-picker value="{{selectedColor}}" show="{{showColorPickerModal}}" bind:change="onColorChange" bind:confirm="onColorConfirm" bind:close="onColorPickerClose" />
+
+
+  <!-- 途经点管理 -->
+  <view class="waypoints-section">
+    <view class="section-header">
+      <view class="section-title">
+        途经点
+        <text class="required">*</text>
+      </view>
+      <view class="add-waypoint-btn" bindtap="addWaypoint">+ 添加途经点</view>
+    </view>
+    <view class="waypoints-list">
+      <view tt:for="{{waypoints}}" tt:key="index" class="waypoint-item">
+        <view class="waypoint-header">
+          <view class="waypoint-index">
+            途经点 {{index + 1}}，{{item.showNameOnMap ? "显示该点" : "隐藏该点"}}
+          </view>
+          <view class="waypoint-actions">
+            <!-- 排序按钮 -->
+            <view class="sort-actions" tt:if="{{waypoints.length > 1}}">
+              <view class="sort-btn {{index === 0 ? 'disabled' : ''}}" bindtap="moveWaypointUp" data-index="{{index}}" tt:if="{{index > 0}}">
+                向上移动
+                <view class="sort-icon">↑</view>
+              </view>
+              <view class="sort-btn {{index === waypoints.length - 1 ? 'disabled' : ''}}" bindtap="moveWaypointDown" data-index="{{index}}" tt:if="{{index < waypoints.length - 1}}">
+                向下移动
+                <view class="sort-icon">↓</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="waypoint-content">
+          <view class="waypoint-name">{{item.name || '未设置名称'}}</view>
+          <view class="waypoint-address">{{item.address || '未选择位置'}}</view>
+          <view class="waypoint-coordinates">
+            <view class="action-btn edit-btn" bindtap="editWaypoint" data-index="{{index}}">
+              编辑
+            </view>
+            <view class="action-btn delete-btn" bindtap="deleteWaypoint" data-index="{{index}}">
+              删除
+            </view>
+            <view class="action-btn insert-btn" bindtap="insertWaypointInBelow" data-index="{{index}}">
+              下方插入途经点
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="empty-waypoints" tt:if="{{waypoints.length === 0}}">
+      <text class="empty-text">暂无途经点，请点击上方按钮添加</text>
+    </view>
+    <!-- 预览按钮 -->
+    <view class="preview-section" tt:if="{{waypoints.length > 0}}">
+      <view class="preview-btn" bindtap="showRoutePreview">
+        <image src="https://icons.unistar.icu/icons/icon-nav.png" class="preview-icon"></image>
+        <text>预览路线</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-actions">
+    <view class="btn btn-cancel" bindtap="cancel">取消</view>
+    <view class="btn btn-save" bindtap="saveRoute">{{isEditMode ? '提交审核' : '提交审核'}}</view>
+  </view>
+</view>
+<!-- 途经点编辑弹窗 -->
+<view class="waypoint-modal" tt:if="{{showWaypointModal}}" bindtap="hideWaypointModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{editingWaypointIndex === -1 ? '添加途经点' : '编辑途经点'}}</text>
+      <view class="modal-close" bindtap="hideWaypointModal">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="input-group">
+        <view class="input-header">
+          <view class="label">
+            位置
+            <text class="required">*</text>
+          </view>
+          <view class="location-selector">
+            <view class="select-location-btn" bindtap="selectLocation">点击选择位置</view>
+          </view>
+        </view>
+        <input class="input" value="{{editingWaypoint.address}}" disabled />
+        <view class="current-location" tt:if="{{editingWaypoint.latitude && editingWaypoint.longitude}}">
+          <text>当前坐标： {{editingWaypoint.latitude}}, {{editingWaypoint.longitude}}</text>
+        </view>
+      </view>
+      <view class="input-group">
+        <view class="input-header">
+          <view class="label">
+            名称
+            <text class="required">*</text>
+          </view>
+        </view>
+        <input class="input" placeholder="请输入途经点名称" value="{{editingWaypoint.name}}" bindinput="onWaypointNameInput" />
+      </view>
+      <view class="input-group">
+        <view class="input-header">
+          <view class="label">
+            地图上显示该途经点
+            <text class="required">*</text>
+          </view>
+        </view>
+        <label class="switch">
+          <switch checked="{{editingWaypoint.showNameOnMap}}" bindchange="switch1Change" />
+        </label>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="btn btn-cancel" bindtap="hideWaypointModal">取消</view>
+      <view class="btn btn-confirm" bindtap="confirmWaypoint">确定</view>
+    </view>
+  </view>
+</view>
+<!-- 地图预览弹框 -->
+<view class="map-preview-modal" tt:if="{{showMapPreview}}" bindtap="hideMapPreview">
+  <view class="map-preview-content" catchtap="stopPropagation">
+    <view class="map-preview-header">
+      <text class="map-preview-title">路线预览</text>
+      <view class="map-preview-close" bindtap="hideMapPreview">×</view>
+    </view>
+    <view class="map-preview-body">
+      <map id="routePreviewMap" class="route-preview-map" scale="{{mapScale}}" latitude="{{mapCenter.latitude}}" longitude="{{mapCenter.longitude}}" markers="{{routeMarkers}}" polyline="{{routePolyline}}" show-location show-scale enable-rotate="{{false}}" enable-overlooking="{{false}}" bindmarkertap="onMarkerTap"></map>
+    </view>
+    <view class="map-preview-footer">
+      <view class="map-controls">
+        <view class="map-control-btn" bindtap="zoomInMap">
+          <image src="https://icons.unistar.icu/icons/big-scale.png" class="control-icon"></image>
+          <text>放大</text>
+        </view>
+        <view class="map-control-btn" bindtap="zoomOutMap">
+          <image src="https://icons.unistar.icu/icons/scale.png" class="control-icon"></image>
+          <text>缩小</text>
+        </view>
+        <view class="map-control-btn" bindtap="resetMapView">
+          <image src="https://icons.unistar.icu/icons/reset.png" class="control-icon"></image>
+          <text>重置视图</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

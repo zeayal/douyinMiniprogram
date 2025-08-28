@@ -1,0 +1,34 @@
+<!--components/search-bar/search-bar.ttml-->
+<view class="search-bar-container">
+  <view class="search-input-button-container" bind:tap="clickSearch">
+    <image class="icon-search" src="https://icons.unistar.icu/icons/icon-search.png" mode="aspectFit" />
+    <input class="search-input" placeholder="输入地点名称进行搜索，支持任意地点名称" value="{{searchQuery}}" bindinput="handleSearchInput" disabled />
+  </view>
+  <view class="scroll-container">
+    <view class="filter-float-bar">
+      <view class="filter-item {{filterType === 'all' ? 'active' : ''}}" data-type="all" data-title="显示全部类型" bindtap="onFilterTap">全部</view>
+      <view class="filter-item {{filterType === 'star' ? 'active' : ''}}" data-type="star" bindtap="onFilterTap">最佳</view>
+      <view class="filter-item {{filterType === 'toilet' ? 'active' : ''}}" data-type="toilet" bindtap="onFilterTap">厕所</view>
+
+      <view class="filter-item {{filterType === 'water' ? 'active' : ''}}" data-type="water" bindtap="onFilterTap">接水</view>
+
+      <view class="filter-item {{filterType === 'charge' ? 'active' : ''}}" data-type="charge" bindtap="onFilterTap">充电</view>
+
+      <view class="filter-item {{filterType === 'tent' ? 'active' : ''}}" data-type="tent" bindtap="onFilterTap">帐篷</view>
+
+      <view class="filter-item {{filterType === 'supermarket' ? 'active' : ''}}" data-type="supermarket" bindtap="onFilterTap">商超</view>
+      <view class="filter-item {{filterType === 'food' ? 'active' : ''}}" data-type="food" bindtap="onFilterTap">夜市</view>
+      <view class="filter-item {{filterType === 'vegetablemarket' ? 'active' : ''}}" data-type="vegetablemarket" bindtap="onFilterTap">菜市场</view>
+
+
+      <view class="filter-item {{filterType === 'parkingLot' ? 'active' : ''}}" data-type="parkingLot" bindtap="onFilterTap">停车场</view>
+      <view class="filter-item {{filterType === 'campingArea' ? 'active' : ''}}" data-type="campingArea" bindtap="onFilterTap">露营地</view>
+      <view class="filter-item {{filterType === 'serviceArea' ? 'active' : ''}}" data-type="serviceArea" bindtap="onFilterTap">服务区</view>
+      <view class="filter-item {{filterType === 'rvPark' ? 'active' : ''}}" data-type="rvPark" bindtap="onFilterTap">房车营地</view>
+
+      <view class="filter-item {{filterType === 'fire' ? 'active' : ''}}" data-type="fire" bindtap="onFilterTap">明火</view>
+      <view class="filter-item {{filterType === 'fish' ? 'active' : ''}}" data-type="fish" bindtap="onFilterTap">钓鱼</view>
+      <view class="filter-item {{filterType === 'free' ? 'active' : ''}}" data-type="free" bindtap="onFilterTap">免费</view>
+    </view>
+  </view>
+</view>

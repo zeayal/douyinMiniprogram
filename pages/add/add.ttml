@@ -1,0 +1,254 @@
+<!-- pages/add/add.wxml -->
+<view class="container">
+  <!-- isLoading -->
+  <skeleton tt:if="{{isLoading}}"></skeleton>
+
+  <block tt:else>
+
+    <!-- 顶部提示 -->
+    <view class="header">
+      <!-- <view class="header-title">{{mode == 'edit' ? '修改营地' : '新增营地'}}</view> -->
+      <view class="header-subtitle">请填写表单信息，带 * 为必填项</view>
+      <!-- SEO友好的隐藏关键词 -->
+      <view class="seo-keywords" aria-hidden="true">
+        <span>新增营地 户外露营 房车营地 自驾攻略 床车露营 野营 帐篷露营 户外装备 露营用品 自驾游 房车旅游 露营基地 营地设施 免费营地 户外运动 旅游攻略 户外 旅游 自驾 房车 露营 床车 自驾游攻略 露营攻略 户外用品 露营装备 新手露营 露营指南 营地推荐 营地查询 营地导航 营地评价 营地设施 营地服务 营地管理 营地运营 营地经营 营地投资 营地建设 营地规划 营地设计 营地装修 营地改造 营地升级 营地维护 营地保养 营地清洁 营地安全 营地环保 营地生态 营地文化 营地历史 营地故事 营地传说 营地神话 营地传说 营地故事 营地历史 营地文化 营地生态 营地环保 营地安全 营地清洁 营地保养 营地维护 营地升级 营地改造 营地装修 营地设计 营地规划 营地建设 营地投资 营地经营 营地运营 营地管理 营地服务 营地评价 营地导航 营地查询 营地推荐 露营指南 新手露营 露营装备 户外用品 露营攻略 自驾游攻略 床车 露营 房车 自驾 旅游 户外</span>
+      </view>
+    </view>
+
+    <!-- 表单区域 -->
+    <view class="form-container">
+      <!-- 位置信息 -->
+      <view class="form-item">
+        <view class="form-label">位置（已选择位置）<text class="required">*</text></view>
+        <view class="location-container" bindtap="chooseLocation">
+          <view class="location-info" tt:if="{{latitude && longitude}}">
+            <text class="location-text">经度：{{longitude}}，纬度：{{latitude}}</text>
+            <text class="location-coords">{{address}}</text>
+          </view>
+          <view class="location-placeholder" tt:else>
+            <text class="location-icon">📍</text>
+            <text>点击选择位置</text>
+          </view>
+        </view>
+      </view>
+
+
+      <!-- 是否为营地 -->
+      <view class="form-item">
+        <view class="form-label">是否为营地 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{isCamp == true ? 'active' : ''}}" bindtap="setIsCamp" data-iscamp="1">
+            <text class="fee-option-text">是营地</text>
+          </view>
+          <view class="fee-option {{isCamp == false ? 'active' : ''}}" bindtap="setIsCamp" data-iscamp="0">
+            <text class="fee-option-text">不是营地</text>
+          </view>
+        </view>
+      </view>
+
+
+      <!-- 便利设施选项（仅当不是营地时显示） -->
+      <view class="form-item" tt:if="{{isCamp == false}}">
+        <view class="form-label">
+          便利设施 <text class="required">*</text>
+          <facility-info></facility-info>
+        </view>
+        <view class="fee-options">
+          <view class="fee-option {{facility == '1' ? 'active' : ''}}" bindtap="setFacility" data-type="1">
+            <text class="fee-option-text">商超</text>
+          </view>
+          <view class="fee-option {{facility == '2' ? 'active' : ''}}" bindtap="setFacility" data-type="2">
+            <text class="fee-option-text">公共厕所</text>
+          </view>
+        </view>
+        <view class="fee-options" style="margin-top: 20rpx;">
+          <view class="fee-option {{facility == '3' ? 'active' : ''}}" bindtap="setFacility" data-type="3">
+            <text class="fee-option-text">菜市场</text>
+          </view>
+          <view class="fee-option {{facility == '4' ? 'active' : ''}}" bindtap="setFacility" data-type="4">
+            <text class="fee-option-text">夜市美食</text>
+          </view>
+        </view>
+
+        <view class="fee-options" style="margin-top: 20rpx;">
+          <view class="fee-option {{facility == '5' ? 'active' : ''}}" bindtap="setFacility" data-type="5">
+            <text class="fee-option-text">网红打卡点</text>
+          </view>
+          <view class="fee-option {{facility == '6' ? 'active' : ''}}" bindtap="setFacility" data-type="6">
+            <text class="fee-option-text">其他</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 营地标题 -->
+      <view class="form-item">
+        <view class="form-label">
+          名称
+          <text class="required">*</text>
+          <view class="input-counter">（当前输入字数：{{name.length}}/30）</view>
+        </view>
+        <input class="form-input" placeholder='{{isCamp ? "请输入营地名称，如人民公园停车场" : "如**超市/**夜市" }}' model:value="{{name}}" maxlength="30" bindinput="onNameInput" />
+
+      </view>
+
+      <!-- 营地介绍 -->
+      <view class="form-item">
+        <view class="form-label">
+          介绍
+          <text class="required">*</text>
+          <view class="input-counter">（当前输入字数：{{intro.length}}/500）</view>
+        </view>
+        <textarea class="form-textarea" placeholder='{{isCamp ? "描述营地的特色、设施等信息。如是否收费？收费多少？有无水卫？能否充电等。" : "输入介绍，如：是不是当地最大的超市，菜市场，夜市，厕所的开放时间等"}}' model:value="{{intro}}" maxlength="500" bindinput="onIntroInput" />
+
+      </view>
+
+      <!-- 营地类型选项（仅当是营地时显示） -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">
+          营地类型 <text class="required">*</text>
+          <camp-type-info></camp-type-info>
+        </view>
+        <view class="fee-options">
+          <view class="fee-option {{campType == '1' ? 'active' : ''}}" bindtap="setCampType" data-type="1">
+            <text class="fee-option-text">停车场营地</text>
+          </view>
+          <view class="fee-option {{campType == '2' ? 'active' : ''}}" bindtap="setCampType" data-type="2">
+            <text class="fee-option-text">服务区营地</text>
+          </view>
+        </view>
+        <view class="fee-options" style="margin-top: 20rpx;">
+          <view class="fee-option {{campType == '3' ? 'active' : ''}}" bindtap="setCampType" data-type="3">
+            <text class="fee-option-text">露营地</text>
+          </view>
+          <view class="fee-option {{campType == '4' ? 'active' : ''}}" bindtap="setCampType" data-type="4">
+            <text class="fee-option-text">房车营地</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 是否收费 -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">是否收费 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{is_charged == '1' ? 'active' : ''}}" bindtap="setFeeOption" data-fee="1">
+            <text class="fee-option-text">收费</text>
+          </view>
+          <view class="fee-option {{is_charged == '0' ? 'active' : ''}}" bindtap="setFeeOption" data-fee="0">
+            <text class="fee-option-text">免费</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 是否有厕所 -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">是否有厕所 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{hasToilet == true ? 'active' : ''}}" bindtap="setToiletOption" data-option="1">
+            <text class="fee-option-text">有厕所</text>
+          </view>
+          <view class="fee-option {{hasToilet == false ? 'active' : ''}}" bindtap="setToiletOption" data-option="0">
+            <text class="fee-option-text">没有</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 是否可以接水 -->
+      <view class="form-item" tt:if="{{isCamp == true || facility == '2'}}">
+        <view class="form-label">是否可以接水 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{hasWater == true ? 'active' : ''}}" bindtap="setWaterOption" data-option="1">
+            <text class="fee-option-text">可以接水</text>
+          </view>
+          <view class="fee-option {{hasWater == false ? 'active' : ''}}" bindtap="setWaterOption" data-option="0">
+            <text class="fee-option-text">不可以</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 是否有充电桩 -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">是否有充电桩 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{hasElectricity == true ? 'active' : ''}}" bindtap="setElectricityOption" data-option="1">
+            <text class="fee-option-text">有充电桩</text>
+          </view>
+          <view class="fee-option {{hasElectricity == false ? 'active' : ''}}" bindtap="setElectricityOption" data-option="0">
+            <text class="fee-option-text">没有</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 是否可以搭帐篷 -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">是否可以搭帐篷 <text class="required">*</text></view>
+        <view class="fee-options">
+          <view class="fee-option {{canPitchTent == true ? 'active' : ''}}" bindtap="setTentOption" data-option="1">
+            <text class="fee-option-text">可以搭帐篷</text>
+          </view>
+          <view class="fee-option {{canPitchTent == false ? 'active' : ''}}" bindtap="setTentOption" data-option="0">
+            <text class="fee-option-text">不可以</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 活动选项 -->
+      <view class="form-item" tt:if="{{isCamp == true}}">
+        <view class="form-label">活动选项（可多选）</view>
+        <view class="checkbox-group">
+          <view class="checkbox-item {{canFishing ? 'active' : ''}}" bindtap="setFishingOption">
+            <text class="checkbox-text">可以钓鱼</text>
+          </view>
+          <view class="checkbox-item {{canFire ? 'active' : ''}}" bindtap="setFireOption">
+            <text class="checkbox-text">可以明火</text>
+          </view>
+        </view>
+      </view>
+
+
+      <!-- 图片上传 -->
+      <view class="form-item">
+        <view class="form-label">
+          {{isCamp ? '营地图片' : '图片'}}
+          <text class="required">* </text>
+        </view>
+        <text class="required desc">{{isCamp ? "停车场全景图/收费牌/厕所/水源/充电桩提升审核通过率" : "外观图/营业时间/特色图片/设施标识提升审核通过率"}}</text>
+        <!-- 上传进度条 -->
+        <view tt:if="{{uploadProgress.show}}" class="upload-progress-bar">
+          <view class="progress-text">图片上传中：{{uploadProgress.finished}}/{{uploadProgress.total}}</view>
+          <view class="progress-outer">
+            <view class="progress-inner" style="width: {{uploadProgress.total > 0 ? (uploadProgress.finished / uploadProgress.total * 100) : 0}}%;"></view>
+          </view>
+        </view>
+        <view class="upload-container">
+          <view class="image-list">
+            <view class="image-item" tt:for="{{pics}}" tt:key="*this">
+              <image src="{{item.previewUrl}}" mode="aspectFill"></image>
+              <view class="delete-btn" data-index="{{index}}" bindtap="deleteImage">×</view>
+              <view class="move-btn left" data-index="{{index}}" bindtap="moveImageLeft" tt:if="{{index > 0}}">
+                <image src="https://icons.unistar.icu/icons/move_left.png" mode="aspectFill"></image>
+              </view>
+              <view class="move-btn right" data-index="{{index}}" bindtap="moveImageRight" tt:if="{{index < pics.length - 1}}">
+                <image src="https://icons.unistar.icu/icons/move_right.png" mode="aspectFill"></image>
+              </view>
+            </view>
+            <view class="upload-btn" bindtap="chooseImage" tt:if="{{pics.length < 9}}">
+              <text class="upload-icon">+</text>
+              <text class="upload-text">上传图片</text>
+            </view>
+          </view>
+          <view class="upload-tip">最多上传9张图片</view>
+        </view>
+      </view>
+
+      <!-- 提交按钮 -->
+      <view class="submit-section">
+        <button class="submit-btn" bindtap="submitForm">提交</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 隐藏的SEO关键词区域 -->
+  <view class="seo-keywords" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;">
+    <text>新增营地 户外露营 房车营地 自驾攻略 床车露营 野营 帐篷露营 户外装备 露营用品 自驾游 房车旅游 露营基地 营地设施 免费营地 户外运动 旅游攻略 户外 旅游 自驾 房车 露营 床车 自驾游攻略 露营攻略 户外用品 露营装备 新手露营 露营指南 营地推荐 营地查询 营地导航 营地评价 营地设施 营地服务 营地管理 营地运营 营地经营 营地投资 营地建设 营地规划 营地设计 营地装修 营地改造 营地升级 营地维护 营地保养 营地清洁 营地安全 营地环保 营地生态 营地文化 营地历史 营地故事 营地传说 营地神话 营地传说 营地故事 营地历史 营地文化 营地生态 营地环保 营地安全 营地清洁 营地保养 营地维护 营地升级 营地改造 营地装修 营地设计 营地规划 营地建设 营地投资 营地经营 营地运营 营地管理 营地服务 营地评价 营地导航 营地查询 营地推荐 露营指南 新手露营 露营装备 户外用品 露营攻略 自驾游攻略 床车 露营 房车 自驾 旅游 户外</text>
+  </view>
+</view>

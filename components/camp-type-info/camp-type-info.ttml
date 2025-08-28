@@ -1,0 +1,85 @@
+<!-- components/camp-type-info/camp-type-info.wxml -->
+<view class="info-icon" bindtap="showModal">❓</view>
+
+<!-- 模态弹框 -->
+<view class="modal-overlay {{visible ? 'show' : ''}}" bindtap="hideModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">营地类型说明</text>
+      <view class="close-btn" bindtap="hideModal">×</view>
+    </view>
+    
+    <view class="modal-body">
+      <view class="table-container">
+        <view class="table-header">
+          <view class="table-cell header">营地类型</view>
+          <view class="table-cell header">使用场景</view>
+          <view class="table-cell header">用户群体</view>
+          <view class="table-cell header">覆盖度</view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">停车场营地</view>
+          <view class="table-cell">城市过夜、临时休息</view>
+          <view class="table-cell">床车、自驾用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 95%;"></view>
+            </view>
+            <text class="coverage-text">95%+</text>
+          </view>
+        </view>
+        
+
+        
+        <view class="table-row">
+          <view class="table-cell">服务区营地</view>
+          <view class="table-cell">长途自驾、高速休息</view>
+          <view class="table-cell">长途旅行用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 85%;"></view>
+            </view>
+            <text class="coverage-text">85%+</text>
+          </view>
+        </view>
+        
+
+        
+        <view class="table-row">
+          <view class="table-cell">露营地</view>
+          <view class="table-cell">户外露营、帐篷露营</view>
+          <view class="table-cell">露营爱好者</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 65%;"></view>
+            </view>
+            <text class="coverage-text">65%+</text>
+          </view>
+        </view>
+        
+        <view class="table-row">
+          <view class="table-cell">房车营地</view>
+          <view class="table-cell">房车旅行、专业营地</view>
+          <view class="table-cell">房车用户</view>
+          <view class="table-cell">
+            <view class="coverage-bar">
+              <view class="coverage-fill" style="width: 45%;"></view>
+            </view>
+            <text class="coverage-text">45%+</text>
+          </view>
+        </view>
+        
+
+      </view>
+      
+      <view class="tips">
+        <view class="tip-title">💡 选择建议：</view>
+        <view class="tip-item">• 根据营地的主要功能和设施选择对应类型</view>
+        <view class="tip-item">• 停车场营地适合临时过夜，服务区营地适合长途休息</view>
+        <view class="tip-item">• 露营地适合户外活动，房车营地适合专业设施</view>
+        <view class="tip-item">• 根据营地主要功能和设施选择对应类型</view>
+      </view>
+    </view>
+  </view>
+</view>

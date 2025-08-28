@@ -1,0 +1,93 @@
+// 搜索栏样式
+.search-bar-container {
+  height: 130rpx;
+  width: 100vw;
+  padding: 8rpx 10rpx 2rpx 10rpx;
+  box-sizing: border-box;
+  background-color: var(--map-background-color);
+  z-index: 10;
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  // 输入框和按钮的容器
+  .search-input-button-container {
+    height: 60rpx;
+    display: flex;
+    /* 使用 Flexbox 布局 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    gap: 12rpx;
+    border-radius: 30rpx;
+    padding: 20rpx;
+    background: linear-gradient(#ffffffcc, #ffffffcc) padding-box, linear-gradient(120deg, #34d399, #60a5fa, #a78bfa) border-box;
+    border: 2px solid transparent;
+
+    .icon-search {
+      width: 40rpx;
+      height: 40rpx;
+    }
+
+    .search-input {
+      flex: 1;
+      /* 输入框占据剩余空间，宽度变短 */
+      height: 50rpx;
+      /* 输入框高度 */
+      line-height: 50rpx;
+      border: none;
+      font-size: 26rpx;
+    }
+  }
+
+  .scroll-container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    /* 移除滚动条（可选） */
+    scrollbar-width: none;
+    /* 火狐 */
+    -ms-overflow-style: none;
+    /* IE 和 Edge */
+
+    height: 60rpx;
+
+    .filter-float-bar {
+      height: 60rpx;
+      display: flex;
+      gap: 8rpx;
+      align-items: center;
+      /* 防止子元素换行 */
+      white-space: nowrap;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14rpx;
+      flex-shrink: 0;
+      height: 45rpx;
+      text-align: center;
+      font-size: 26rpx;
+      color: var(--text-color);
+      border-radius: 30rpx;
+      border: 1px solid #999;
+      // background-color: #fff;
+      transition: border var(--transition-fast), color var(--transition-fast);
+    }
+
+    .filter-item.active {
+      font-size: var(--font-size-large);
+      font-weight: bold;
+      background-color: #228b2208;
+      color: var(--secondary-color);
+      border: 1px solid var(--secondary-color)
+    }
+  }
+
+  /* 针对WebKit内核的浏览器（Chrome、Safari、安卓大部分浏览器） */
+  .scroll-container::-webkit-scrollbar {
+    display: none;
+    /* 隐藏滚动条 */
+    width: 0;
+    height: 0;
+  }
+}

@@ -1,0 +1,2 @@
+"use strict";const{Deflate:Deflate,deflate:deflate,deflateRaw:deflateRaw,gzip:gzip}=require("./lib/deflate"),{Inflate:Inflate,inflate:inflate,inflateRaw:inflateRaw,ungzip:ungzip}=require("./lib/inflate"),constants=require("./lib/zlib/constants");module.exports.Deflate=Deflate,module.exports.deflate=deflate,module.exports.deflateRaw=deflateRaw,module.exports.gzip=gzip,module.exports.Inflate=Inflate,module.exports.inflate=inflate,module.exports.inflateRaw=inflateRaw,module.exports.ungzip=ungzip,module.exports.constants=constants;
+//# sourceMappingURL=index.js.map

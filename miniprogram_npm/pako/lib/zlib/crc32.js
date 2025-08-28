@@ -1,0 +1,2 @@
+"use strict";const makeTable=()=>{let r,e=[];for(var c=0;c<256;c++){r=c;for(var t=0;t<8;t++)r=1&r?3988292384^r>>>1:r>>>1;e[c]=r}return e},crcTable=new Uint32Array(makeTable()),crc32=(r,e,c,t)=>{const a=crcTable,l=t+c;r^=-1;for(let c=t;c<l;c++)r=r>>>8^a[255&(r^e[c])];return-1^r};module.exports=crc32;
+//# sourceMappingURL=crc32.js.map

@@ -1,0 +1,128 @@
+/* pages/order/order.wxss */
+
+page {
+  background-color: #f8f8f8;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding: 20rpx;
+  box-sizing: border-box;;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.order-card {
+  padding: 30rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-time,
+.order-number {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.order-time {
+  margin-bottom: 5rpx;
+}
+
+.pay-status {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.pay-status.paid {
+  color: #07c160;
+  /* 绿色 */
+}
+
+.pay-status.unpaid {
+  color: #ff5c5c;
+  /* 红色 */
+}
+
+.order-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.order-comment {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.order-price-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.currency {
+  font-size: 32rpx;
+  color: #333;
+  margin-right: 4rpx;
+}
+
+.price {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.empty-hint {
+  font-size: 28rpx;
+  color: #999;
+}

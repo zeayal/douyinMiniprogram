@@ -1,0 +1,176 @@
+<!--pages/detail/detail.ttml-->
+<view class="container">
+  <!-- isLoading -->
+  <skeleton tt:if="{{isLoading}}"></skeleton>
+  <block tt:else>
+    <!-- 轮播图部分 -->
+    <view class="slideshow-container">
+      <view class="tip-wrapper" tt:if="{{tip}}">
+        <view class="tip-container">
+          <view class="tip-text" style="animation-duration: {{scrollDuration}}s">{{tip}}</view>
+        </view>
+      </view>
+      <swiper class="slides" autoplay interval="5000">
+        <block tt:if="{{detail.images.length > 0}}">
+          <block tt:for="{{detail.images}}" tt:key="*this">
+            <swiper-item>
+              <image class="slide-image" mode="aspectFill" src="{{item}}" alt="{{detail.name}}的实拍图"></image>
+            </swiper-item>
+          </block>
+        </block>
+        <block tt:else>
+          <swiper-item>
+            <image class="slide-image" mode="aspectFit" src="https://icons.unistar.icu/icons/no_pictures_yet.jpg"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <!-- 营地信息 -->
+    <view class="camp-info">
+      <view class="tag-bar">
+        <view class="filter-item star-{{detail.scoreNumber}}" tt:if="{{detail.scoreNumber >= 3}}">{{detail.scoreNumber}}星</view>
+        <view class="filter-item" tt:if="{{!detail.isCharged}}" data-type="price-type">免费</view>
+        <view class="filter-item charged" tt:if="{{detail.isCharged}}">收费</view>
+        <view class="filter-item" data-type="facility" tt:if="{{detail.hasToilet}}">厕所</view>
+        <view class="filter-item" tt:if="{{detail.hasWater}}">接水</view>
+        <view class="filter-item" tt:if="{{detail.hasElectricity}}">充电桩</view>
+        <view class="filter-item" tt:if="{{detail.canPitchTent}}">搭帐篷</view>
+      </view>
+      <view class="camp-name" data-type="camp-name">{{detail.name}}</view>
+      <view class="camp-stats">
+        <text class="score">导航次数： {{detail.navigationCount }}</text>
+        <text class="views">查看次数： {{detail.viewCount || '0'}}</text>
+      </view>
+      <view class="button-group">
+        <view class="nav-button" bind:tap="nav">
+          <text>导航前往</text>
+          <block tt:if="{{directDistance}}">
+            <image class="spot-distance-image" src="https://icons.unistar.icu/icons/arrow_right.png" mode="aspectFill" />
+            <text class="spot-distance-text">直线距离{{(directDistance.formatted)}}</text>
+          </block>
+        </view>
+        <view class="action-button-group">
+          <view class="action-button" bind:tap="handleCollect" style="background-color: {{isCollected ? '#ffa500' : '#909399'}}">
+            <text>{{isCollected ? '已收藏' : '收藏'}}</text>
+          </view>
+          <button open-type="share" class="action-button share-button">
+            <text>分享</text>
+          </button>
+          <view class="action-button checkin-button" bind:tap="showCheckinModal">
+            <text>打卡评分</text>
+          </view>
+          <view class="action-button modify-button" bind:tap="handleModify">
+            <text>修改</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 营地详情 -->
+    <view class="camp-detail">
+      <view class="section-title">营地介绍</view>
+      <view class="intro">
+        <view style="white-space: pre-line;">{{detail.description}}</view>
+      </view>
+    </view>
+
+
+    <!-- 打卡记录 -->
+    <view class="camp-detail">
+      <view class="section-title">最新打卡</view>
+      <view class="check-in-empty-list">
+        <view>🌟 <text class="highlight-1">你的一句话</text>，能帮大家<text class="highlight-1">少走不少冤枉路！</text></view>
+        <view>📝
+          <text class="highlight">营地</text>还有效吗？
+          <text class="highlight">收费</text>变了？
+          <text class="highlight">设施</text>有调整？
+        </view>
+        <view>
+          🔌 能用<text class="highlight-2">电</text>吗？
+          🚰 有<text class="highlight-2">水</text>吗？
+          🚽 <text class="highlight-2">厕所</text>可用时间？
+        </view>
+        <view>
+          📍 <text class="record-check-in-text highlight-3" bind:tap="showCheckinModal">[打卡评分]</text>
+          或 <text class="record-check-in-text highlight-4" bind:tap="handleModify">[修改]</text> 分享营地最新情况！
+        </view>
+      </view>
+      <view class="action-items">
+        <view class="action-item" tt:for="{{checkInList}}" tt:key="id">
+          <view class="action-header">
+            <text class="action-user">{{item.nickName}}</text>
+            <text class="action-time">{{item.checkInTime}}</text>
+          </view>
+          <view class="action-content">
+            {{item.content}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 营地图片列表 -->
+    <view class="camp-detail">
+      <view class="section-title">营地实拍</view>
+      <view class="photo-grid">
+        <block tt:if="{{detail.images.length > 0}}">
+          <view class="photo-item" tt:for="{{detail.images}}" tt:key="*this">
+            <image mode="widthFix" src="{{item}}"></image>
+          </view>
+        </block>
+        <block tt:else>
+          <view class="photo-item">
+            <image mode="widthFix" src="https://icons.unistar.icu/icons/no_pictures_yet.jpg"></image>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 打卡弹框 -->
+    <view class="modal" tt:if="{{showModal}}">
+      <view class="modal-mask" bind:tap="hideCheckinModal"></view>
+      <view class="modal-content">
+        <view class="modal-header">
+          <text class="modal-title">营地打卡评分</text>
+          <text class="modal-close" bind:tap="hideCheckinModal">×</text>
+        </view>
+        <view class="modal-body">
+          <!-- 星级评分 -->
+
+          <view class="rating-section">
+            <text class="rating-label">营地评分：</text>
+            <view>
+              <view class="star-rating">
+                <view class="star-item {{selectedRating >= item ? 'active' : ''}}" tt:for="{{stars}}" tt:key="*this" bind:tap="selectRating" data-rating="{{item}}">
+                  {{selectedRating >= item ? '★' : '☆'}}
+                </view>
+              </view>
+              <text class="rating-text">当前评分: {{selectedRating > 0 ? selectedRating + '星' : '未选择'}}</text>
+            </view>
+          </view>
+
+          <textarea class="checkin-textarea" placeholder="分享你的营地体验..." maxlength="200" bindinput="onInputChange" value="{{checkinContent}}"></textarea>
+          <view class="text-count">{{checkinContent.length}}/200</view>
+        </view>
+        <view class="modal-footer">
+          <button class="submit-button" bind:tap="submitCheckin">提交</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 营地详细信息 -->
+    <view class="camp-details" aria-hidden="true">
+      <view class="detail-item" data-key="name">营地名称: {{detail.name}}</view>
+      <view class="detail-item" data-key="type">营地类型: 户外露营营地</view>
+      <view class="detail-item" data-key="facility">营地设施: {{detail.hasToilet ? '有厕所' : '无厕所'}} {{detail.hasWater ? '可接水' : '不可接水'}} {{detail.hasElectricity ? '有充电桩' : '无充电桩'}}</view>
+      <view class="detail-item" data-key="location">营地位置: 纬度{{detail.latitude}} 经度{{detail.longitude}}</view>
+      <view class="detail-item" data-key="feature">营地特色: {{detail.description || '适合自驾、房车停靠'}}</view>
+    </view>
+
+  </block>
+
+
+
+
+
+</view>

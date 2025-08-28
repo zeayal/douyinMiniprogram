@@ -1,0 +1,49 @@
+/**app.wxss**/
+page {
+  box-sizing: border-box;
+}
+
+page view {
+  box-sizing: border-box;
+}
+
+/* CSS变量定义 */
+page {
+  /* 颜色变量 */
+  --map-background-color: #f2f1ee;
+  --primary-color: #006400;
+  --secondary-color: #228B22;
+  --text-color: #666;
+  --border-color: #e0e0e0;
+  --background-color: #ffffff;
+
+  /* 尺寸变量 */
+  --border-radius: 8rpx;
+  --padding-small: 8rpx;
+  --padding-medium: 16rpx;
+  --padding-large: 24rpx;
+
+  /* 字体变量 */
+  --font-size-small: 20rpx;
+  --font-size-medium: 22rpx;
+  --font-size-large: 24rpx;
+
+  /* 阴影变量 */
+  --shadow-light: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+
+  /* 过渡变量 */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+}
+
+cover-view,
+cover-image,
+scroll-view,
+view {
+  box-sizing: border-box;
+}
+
+.text-blod {
+  font-weight: bold;
+}

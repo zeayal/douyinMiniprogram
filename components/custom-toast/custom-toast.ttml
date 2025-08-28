@@ -1,0 +1,11 @@
+<view class="custom-toast {{visible ? 'show' : ''}}" tt:if="{{visible}}">
+  <view class="toast-content">
+    <view class="toast-icon" tt:if="{{icon}}">
+      <image src="{{icon}}" class="icon-image" tt:if="{{iconType === 'image'}}"></image>
+      <text class="icon-text" tt:else>{{icon}}</text>
+    </view>
+    <view class="toast-text">
+      <text tt:for="{{textLines}}" tt:key="index" class="text-line">{{item}}</text>
+    </view>
+  </view>
+</view> 

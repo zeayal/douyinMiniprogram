@@ -1,0 +1,17 @@
+{
+    "pages": ["pages/map/map"],
+    "lazyCodeLoading": "requiredComponents",
+    "usingComponents": {},
+    "permission": {
+        "scope.userLocation": {
+            "desc": "你的位置信息将用于小程序位置接口的效果展示"
+        }
+    },
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "镜里山河，全国10万+免费露营地 - 户外自驾游、房车露营、免费露营地",
+        "navigationBarTextStyle": "black"
+    },
+    "requiredPrivateInfos": ["getLocation", "chooseLocation"]
+}

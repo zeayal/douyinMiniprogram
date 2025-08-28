@@ -1,0 +1,59 @@
+<!-- components/spot-card/spot-card.wxml -->
+<block tt:if="{{showSpotCard}}">
+  <view class="spot-card-container">
+    <view class="spot-card-wrapper">
+      <view class="action-group">
+        <view bind:tap="handleNavTap" class="action-item action-nav">
+          <image src="https://icons.unistar.icu/icons/icon-nav.png" mode="aspectFit" />
+          <view>导航</view>
+        </view>
+        <view class="action-item action-fav" bind:tap="handleFavTap">
+          <image src="{{isCollected ? 'https://icons.unistar.icu/icons/icon-faved.png' : 'https://icons.unistar.icu/icons/icon-fav.png' }}" mode="aspectFit" />
+          <view>{{isCollected ? '已收藏' : '收藏'}}</view>
+        </view>
+        <view class="action-item action-close" bind:tap="handleCloseCardTap">
+          <image src="https://icons.unistar.icu/icons/icon-close.png" mode="aspectFit" />
+        </view>
+      </view>
+      <view class="spot-card" bind:tap="handleCardTap">
+        <view class="section-image-container">
+          <view class="spot-distance-watermark" tt:if="{{selectedSpot.directDistance}}">直线距离{{selectedSpot.directDistance.formatted}}</view>
+          <block tt:if="{{isLoadingCoverImage}}">
+            <!-- 骨架屏动画（替代旋转图标） -->
+            <view class="skeleton show">
+              <!-- 骨架屏背景 -->
+              <view class="skeleton-bg"></view>
+              <!-- 渐变扫描动画 -->
+              <view class="skeleton-shimmer"></view>
+            </view>
+          </block>
+          <block tt:else>
+            <!-- 骨架屏动画（替代旋转图标） -->
+            <view class="skeleton {{ isLoaded  ? 'hide' : 'show' }}">
+              <!-- 骨架屏背景 -->
+              <view class="skeleton-bg"></view>
+              <!-- 渐变扫描动画 -->
+              <view class="skeleton-shimmer"></view>
+            </view>
+            <view class="target-image-container">
+              <image src="{{selectedSpotCoverImage || 'https://icons.unistar.icu/icons/no_pictures_yet.jpg' }}" class="target-image {{ isLoaded ? 'show' : 'hide' }}" bindload="onImageLoad" />
+            </view>
+          </block>
+        </view>
+        <view class="section-spot-info">
+          <view class="spot-title">{{ selectedSpot.name}}</view>
+          <view class="spot-description">{{selectedSpot.descriptionTrim}}</view>
+          <view class="tag-bar">
+            <view class="filter-item free-tag" tt:if="{{!selectedSpot.isCharged}}">免费</view>
+            <view class="filter-item charged-tag" tt:if="{{selectedSpot.isCharged}}">收费</view>
+            <view class="filter-item" tt:if="{{selectedSpot.isStarCamp}}">最佳营地</view>
+            <view class="filter-item" tt:if="{{selectedSpot.hasToilet}}">厕所</view>
+            <view class="filter-item" tt:if="{{selectedSpot.hasWater}}">接水</view>
+            <view class="filter-item" tt:if="{{selectedSpot.hasElectricity}}">充电桩</view>
+            <view class="filter-item" tt:if="{{selectedSpot.canPitchTent}}">搭帐篷</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</block>

@@ -1,0 +1,25 @@
+<!--pages/faq/faq.ttml-->
+<view class="container">
+
+  <view class="header">
+    <view class="title">常见问题</view>
+    <view class="subtitle">户外露营、房车营地、自驾攻略相关问题解答</view>
+  </view>
+
+  <view class="faq-list">
+    <view class="faq-item" tt:for="{{faqList}}" tt:key="id">
+      <view class="faq-question" bindtap="toggleFaq" data-index="{{index}}">
+        <text class="question-text">{{item.question}}</text>
+        <view class="arrow {{item.expanded ? 'expanded' : ''}}">▼</view>
+      </view>
+      <view class="faq-answer {{item.expanded ? 'expanded' : ''}}">
+        <text>{{item.answer}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- SEO关键词区域 -->
+  <view class="seo-content" aria-hidden="true">
+    <text>户外露营常见问题 房车营地FAQ 自驾攻略问题 免费露营地问答 床车露营指南 野营注意事项 帐篷露营技巧 户外装备选择 露营用品推荐 自驾游攻略 房车旅游问题 露营基地介绍 营地设施说明 免费营地查询 户外运动安全 旅游攻略问答 营地服务介绍 营地管理说明 营地运营模式 营地经营方式 营地投资建议 营地建设规划 营地设计方案 营地装修风格 营地改造升级 营地维护保养 营地清洁卫生 营地安全保障 营地环保要求 营地生态保护 营地文化传承 营地历史故事 营地传说神话</text>
+  </view>
+</view>

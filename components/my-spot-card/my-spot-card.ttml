@@ -1,0 +1,28 @@
+<!-- components/spot-card/spot-card.wxml -->
+<view class="collection-spot-card-container list-item">
+  <view class="spot-card" catch:tap="handleCardTap">
+    <view class="image-container">
+      <image class="spot-image" src="{{spot.images[0] || 'https://icons.unistar.icu/icons/no_pictures_yet.jpg'}}" mode="aspectFill"></image>
+      <text class="spot-free-watermark" tt:if="{{!spot.isCharged}}">免费</text>
+      <text class="spot-charged-watermark" tt:if="{{spot.isCharged}}">收费</text>
+    </view>
+    <view class="spot-info">
+      <view class="tag-bar">
+        <view class="filter-item star-{{spot.scoreNumber}}" tt:if="{{spot.scoreNumber >= 3}}">{{spot.scoreNumber}}星</view>
+        <view class="filter-item" tt:if="{{spot.hasToilet}}">厕所</view>
+        <view class="filter-item" tt:if="{{spot.hasWater}}">接水</view>
+        <view class="filter-item" tt:if="{{spot.hasElectricity}}">充电桩</view>
+        <view class="filter-item" tt:if="{{spot.canPitchTent}}">搭帐篷</view>
+      </view>
+      <view class="spot-title">{{spot.name}}</view>
+      <view class="spot-description">{{(spot.description || '暂无描述')}}</view>
+    </view>
+    <view class="nav-section">
+      <image src="{{navIcon}}" class="nav-icon" catch:tap="handleNavTap"></image>
+      <view class="distance" tt:if="{{spot.distance}}">
+        <view>直线距离:</view>
+        <view> {{spot.distance.formatted}}</view>
+      </view>
+    </view>
+  </view>
+</view>

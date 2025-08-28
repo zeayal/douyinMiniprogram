@@ -1,0 +1,24 @@
+<!-- pages/collection/collection.wxml -->
+<view class="container">
+  <!-- isLoading -->
+  <skeleton tt:if="{{isLoading}}"></skeleton>
+
+  <view class="collection-list" tt:else>
+    <view class="seo-keywords" aria-hidden="true">
+      <span>户外露营</span>
+      <span>房车营地</span>
+      <span>自驾</span>
+      <span>旅游</span>
+      <span>户外</span>
+    </view>
+    
+    <block tt:if="{{collections.length}}">
+      <my-spot-card tt:for="{{collections}}" tt:key="id" spot="{{item}}" bind:navigateToDetail="navigateToDetail" bind:navigateToSpot="navigateToSpot"></my-spot-card>
+    </block>
+    <view tt:else class="empty-container">
+      <text class="empty-text">暂无记录</text>
+    </view>
+  </view>
+
+  <map style="display: none;" id="myMap" scale="14"></map>
+</view>

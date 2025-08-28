@@ -1,0 +1,283 @@
+.route-detail-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 160rpx;
+}
+
+/* 路线头部信息 */
+.route-header {
+  color: white;
+  padding: 40rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.route-title-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.route-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  flex: 1;
+}
+
+.route-color-indicator {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid;
+  margin-left: 20rpx;
+}
+
+.route-description {
+  font-size: 28rpx;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 30rpx;
+}
+
+.route-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-bottom: 8rpx;
+}
+
+.stat-value {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+/* 地图部分 */
+.map-section {
+  background: white;
+  margin: 0 20rpx 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.section-title text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.map-container {
+  height: 800rpx;
+  position: relative;
+}
+
+.route-detail-map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-controls {
+  display: flex;
+  justify-content: space-around;
+  padding: 20rpx 0;
+  background: #f8f8f8;
+}
+
+.map-control-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  background: white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  min-width: 120rpx;
+}
+
+.control-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-bottom: 8rpx;
+}
+
+.map-control-btn text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 申请修改路线按钮 */
+.edit-route-btn-container {
+  margin-top: 100rpx;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.edit-route-btn {
+  width: 80vw;
+  height: 80rpx;
+  // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.edit-route-btn .edit-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+}
+
+/* 途经点列表 */
+.points-section {
+  background: white;
+  margin: 0 20rpx 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.points-list {
+  padding: 0 30rpx;
+}
+
+.point-item {
+  display: flex;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: relative;
+}
+
+.point-item:last-child {
+  border-bottom: none;
+}
+
+.point-index {
+  width: 60rpx;
+  height: 60rpx;
+  // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.point-info {
+  flex: 1;
+}
+
+.point-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+  padding-right: 30rpx;
+}
+
+.point-address {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.point-arrow {
+  position: absolute;
+  top: 30rpx;
+  right: 0rpx;
+  color: #ccc;
+  font-size: 32rpx;
+  margin-left: 20rpx;
+  image {
+    width: 40rpx;
+    height: 40rpx;
+  }
+}
+
+/* 详细信息 */
+.detail-section {
+  background: white;
+  margin: 0 20rpx 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.detail-content {
+  padding: 0 30rpx 30rpx;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.detail-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  text-align: right;
+  max-width: 400rpx;
+}
+
+/* 加载和错误状态 */
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 100rpx 30rpx;
+  color: #666;
+}
+
+.error-container text {
+  display: block;
+  margin-bottom: 30rpx;
+  font-size: 28rpx;
+}
+
+.retry-btn {
+  // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+}
+
+.retry-btn::after {
+  border: none;
+}

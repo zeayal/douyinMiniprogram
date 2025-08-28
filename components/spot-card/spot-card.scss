@@ -1,0 +1,255 @@
+/* 精简详情卡片样式 */
+.spot-card-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  /* 监听bottom变化 */
+  z-index: 100;
+  background: #ffffffc4;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2rpx);
+}
+
+.spot-card {
+  display: flex;
+  justify-content: space-between;
+  margin: 0rpx 0rpx;
+  position: relative;
+  height: 340rpx;
+}
+
+.section-image-container {
+  position: relative;
+  width: 30vw;
+  height: 335rpx;
+}
+
+.section-spot-info {
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  padding-left: 10rpx;
+}
+
+.spot-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spot-description {
+  font-size: 32rpx;
+  line-height: 1.3;
+  color: #434343;
+  white-space: normal;
+}
+
+.spot-actions {
+  display: flex;
+  align-items: center;
+  margin-left: 20rpx;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.start-navigation-btn {
+  background: #006400;
+  /* 绿色背景 */
+  color: #fff;
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  margin-bottom: auto;
+  /* 推到底部 */
+}
+
+.close-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-top: auto;
+  /* 推到顶部 */
+}
+
+/* 免费水印标签样式 */
+.spot-distance-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #008000a2;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 4rpx 4rpx;
+  z-index: 5;
+}
+
+.charged-tag {
+  color: black;
+  border: 1px solid black;
+}
+
+.free-tag {
+  color: green;
+  border: 1px solid green;
+}
+
+.nav-icon {
+  height: 100rpx;
+  width: 100rpx;
+  margin-right: 4rpx;
+}
+
+.distance {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+.tag-bar {
+  display: flex;
+}
+
+.filter-item {
+  font-size: 24rpx;
+  color: green;
+  border: solid 1px green;
+  padding: 1rpx 4rpx;
+  margin-right: 5rpx;
+}
+
+
+.target-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: opacity 0.4s ease-out;
+
+  .target-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.section-nav-section {
+  width: 15vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 骨架屏核心样式 */
+.skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 骨架屏背景（灰色占位） */
+.skeleton-bg {
+  width: 100%;
+  height: 100%;
+  background-color: #eaeaea;
+  border-radius: 8rpx;
+}
+
+/* 扫描动画（模拟加载进度） */
+.skeleton-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  /* 从左侧外部开始 */
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  animation: shimmer 1.5s infinite;
+  /* 无限循环动画 */
+}
+
+/* 扫描动画定义 */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.action-group {
+  display: flex;
+}
+
+.action-item {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  height: 80rpx;
+  border: 1rpx solid rgb(224, 224, 224);
+  color: #333333;
+  font-size: 40rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  transition: all 0.3s ease-in-out;
+}
+
+.action-group cover-image {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.action-item:active {
+  scale: 0.96;
+  background: #ffffff;
+}
+
+.action-nav {
+  border-right: none;
+  flex: 3;
+}
+
+.action-fav {
+  border-right: none;
+  flex: 2;
+}
+
+.action-close {
+  flex: 2;
+
+}
