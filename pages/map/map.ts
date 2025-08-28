@@ -68,6 +68,7 @@ Page({
     centerLocation: { latitude: 0, longitude: 0 },// 当前地图中心位置
     scale: INIT_SCALE, // 地图比例
     filterType: 'all', // 新增：筛选类型
+    lastMapScale: INIT_SCALE, // 地图比例
   },
 
   // 声明防抖函数，稍后在 onLoad 中初始化
@@ -314,6 +315,24 @@ Page({
       const { centerLocation, scale: newScale } = e.detail;
       const { latitude, longitude } = centerLocation;
       this.setData({ centerLocation: centerLocation });
+      // 判读是否是缩放地图
+      const { lastMapScale } = this.data
+      console.log('lastMapScale', lastMapScale, newScale);
+      if (Math.abs(lastMapScale - newScale) > 1) {
+        this.setData({
+          lastMapScale: newScale
+        })
+        this.getList({
+          latitude,
+          longitude,
+          scale: newScale
+        });
+        return;
+      }
+
+
+
+
       const { lastRequestLocation } = this.data
       console.log('lastRequestLocation?.latitude', typeof lastRequestLocation?.latitude)
       const distanceGCJ02 = lastRequestLocation?.latitude ? calculateDistanceGCJ02(
@@ -323,7 +342,6 @@ Page({
         lastRequestLocation?.longitude
       ) : 0;
       const moveDistance = lastRequestLocation ? distanceGCJ02 / 1000 : this.data.distanceThreshold + 1;
-
       const canDragRequest = moveDistance > this.data.distanceThreshold;
       if (canDragRequest) {
         this.getList({
@@ -331,7 +349,6 @@ Page({
           longitude,
           scale: newScale
         });
-
       }
 
 
