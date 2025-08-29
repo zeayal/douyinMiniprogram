@@ -34,9 +34,9 @@
             <view class="text">定位</view>
         </view>
 
-        <view class="floating-button" bind:tap="addRoute">
+        <!-- <view class="floating-button" bind:tap="addRoute">
             <image src="https://icons.unistar.icu/icons/add.png" class="icon"></image>
             <view class="text">新增</view>
-        </view>
+        </view> -->
     </view>
 </view>

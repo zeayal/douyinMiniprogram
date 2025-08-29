@@ -372,9 +372,11 @@
 .share-button {
   background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
   box-shadow: 0 4rpx 12rpx rgba(33, 150, 243, 0.3);
-  max-width: 160rpx !important;
+  // max-width: 160rpx !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  color: white;
+  flex: 1;
 }
 
 .nav-icon,

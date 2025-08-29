@@ -679,6 +679,13 @@ Page({
     });
   },
 
+  // 跳转到我的
+  navigateToMy() {
+    tt.navigateTo({
+      url: "/pages/profile/profile",
+    });
+  },
+
   // 关闭卡片
   handleCloseSoptCard() {
     this.setData({

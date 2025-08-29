@@ -194,7 +194,7 @@ Page({
 
   // 地图标记点点击事件
   onMarkerTap(e: any) {
-    const markerId = e.markerId;
+    const markerId = Number(e.detail.markerId);
     const point = this.data.routeDetail.points[markerId];
     if (point) {
       const { latitude, longitude, name } = point

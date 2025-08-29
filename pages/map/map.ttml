@@ -7,7 +7,7 @@
         <image class="center-marker" src="https://icons.unistar.icu/icons/center-marker.png" />
     </view>
     <!-- 按钮容器 -->
-    <view class="button-container" style="top: 250rpx">
+    <view class="button-container" style="top: 350rpx">
         <!-- 分享 -->
 
         <button open-type="share" class="floating-button share-btn">
@@ -40,11 +40,16 @@
             <view class="text">当前定位</view>
         </view>
 
+        <view class="floating-button" bind:tap="navigateToMy">
+            <image src="https://icons.unistar.icu/icons/mine.png" class="icon"></image>
+            <view class="text">个人中心</view>
+        </view>
+
         <!-- 新增营地按钮 -->
-        <view class="floating-button" bind:tap="navigateToAdd">
+        <!-- <view class="floating-button" bind:tap="navigateToAdd">
             <image src="https://icons.unistar.icu/icons/add.png" class="icon"></image>
             <view class="text">新增营地</view>
-        </view>
+        </view> -->
 
     </view>
 

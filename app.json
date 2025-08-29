@@ -1,40 +1,52 @@
 {
-    "pages": ["pages/map/map", "pages/detail/detail", "pages/add/add", "pages/profile/profile", "pages/about/about", "pages/feedback/feedback", "pages/collection/collection", "pages/order/order", "pages/orderDetail/orderDetail", "pages/faq/faq", "pages/addRoute/addRoute", "pages/routeDetail/routeDetail", "pages/tourRoutes/tourRoutes"],
-    "lazyCodeLoading": "requiredComponents",
-    "usingComponents": {},
-    "permission": {
-        "scope.userLocation": {
-            "desc": "你的位置信息将用于小程序位置接口的效果展示"
-        }
-    },
-    "window": {
-        "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#fff",
-        "navigationBarTitleText": "镜里山河，全国10万+免费露营地 - 户外自驾游、房车露营、免费露营地",
-        "navigationBarTextStyle": "black"
-    },
-    "requiredPrivateInfos": ["getLocation", "chooseLocation"],
-    "tabBar": {
-        "position": "bottom",
-        "color": "#666666",
-        "selectedColor": "#228B22",
-        "backgroundColor": "#fff",
-        "borderStyle": "black",
-        "list": [{
-            "pagePath": "pages/map/map",
-            "text": "露营地",
-            "iconPath": "./images/tabbar/map.png",
-            "selectedIconPath": "./images/tabbar/map_selected.png"
-        }, {
-            "pagePath": "pages/tourRoutes/tourRoutes",
-            "text": "热门线路",
-            "iconPath": "./images/tabbar/hot_line.png",
-            "selectedIconPath": "./images/tabbar/hot_line_selected.png"
-        }, {
-            "pagePath": "pages/profile/profile",
-            "text": "我的",
-            "iconPath": "./images/tabbar/my.png",
-            "selectedIconPath": "./images/tabbar/my_selected.png"
-        }]
+  "pages": [
+    "pages/map/map",
+    "pages/detail/detail",
+    "pages/profile/profile",
+    "pages/about/about",
+    "pages/collection/collection",
+    "pages/order/order",
+    "pages/orderDetail/orderDetail",
+    "pages/faq/faq",
+    "pages/routeDetail/routeDetail",
+    "pages/tourRoutes/tourRoutes"
+  ],
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {},
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "镜里山河，全国10万+免费露营地 - 户外自驾游、房车露营、免费露营地",
+    "navigationBarTextStyle": "black"
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "tabBar": {
+    "position": "bottom",
+    "color": "#666666",
+    "selectedColor": "#228B22",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/map/map",
+        "text": "露营地",
+        "iconPath": "./images/tabbar/map.png",
+        "selectedIconPath": "./images/tabbar/map_selected.png"
+      },
+      {
+        "pagePath": "pages/tourRoutes/tourRoutes",
+        "text": "热门线路",
+        "iconPath": "./images/tabbar/hot_line.png",
+        "selectedIconPath": "./images/tabbar/hot_line_selected.png"
+      }
+    ]
+  }
 }

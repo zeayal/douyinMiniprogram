@@ -54,11 +54,11 @@
   </view>
 
   <!-- 申请修改路线按钮 -->
-  <view class="edit-route-btn-container">
+  <!-- <view class="edit-route-btn-container">
     <view class="edit-route-btn" style="background-color: {{routeDetail.color}};" bindtap="onEditRoute">
       <text>申请修改路线</text>
     </view>
-  </view>
+  </view> -->
 
 
   <!-- 加载状态 -->

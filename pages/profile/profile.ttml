@@ -31,26 +31,26 @@
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/collect.png"></image>
           </view>
-          <text class="func-name">我的收藏</text>
+          <text class="func-name">营地收藏</text>
         </view>
         <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="checkin">
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/like.png"></image>
           </view>
-          <text class="func-name">我的打卡</text>
+          <text class="func-name">营地打卡</text>
         </view>
-        <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="camp">
+        <!-- <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="camp">
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/camp.png"></image>
           </view>
           <text class="func-name">我的营地</text>
-        </view>
-        <view class="grid-item" bindtap="handleMenuTap" data-type="addCamp">
+        </view> -->
+        <!-- <view class="grid-item" bindtap="handleMenuTap" data-type="addCamp">
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/add.png"></image>
           </view>
           <text class="func-name">新增营地</text>
-        </view>
+        </view> -->
       </view>
     </view>
     <!-- <view class="vip-card" bindtap="handleBuyVip" wx:if="{{!userInfo.isVip}}">
@@ -68,12 +68,12 @@
         </view>
         <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
       </view>
-      <view class="menu-item" bindtap="handleMenuTapItem" data-type="feedback">
+      <!-- <view class="menu-item" bindtap="handleMenuTapItem" data-type="feedback">
         <view class="menu-left">
           <text class="menu-text">意见反馈</text>
         </view>
         <image class="arrow-icon" src="https://icons.unistar.icu/icons/arrow.png"></image>
-      </view>
+      </view> -->
       <view class="menu-item" bindtap="handleMenuTapItem" data-type="order">
         <view class="menu-left">
           <text class="menu-text">我的订单</text>
