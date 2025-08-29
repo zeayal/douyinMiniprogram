@@ -138,15 +138,6 @@ Page({
   async handleLoadCached() {
     try {
       const cached = await storage.getItemAsync('cached');
-      // const cached_weak_list = await storage.getItemAsync('cached_weak_list');
-      // if (cached_weak_list) {
-      //   const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached_weak_list });
-      //   if (Array.isArray(data)) {
-      //     this.data._allSpots = data;
-      //     // 如果有500公里缓存先用这个
-      //     return
-      //   }
-      // }
       if (cached) {
         const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached });
         if (Array.isArray(data)) {
@@ -310,10 +301,6 @@ Page({
         this.mapContext.getScale({
           success: ({ scale }: any) => {
 
-
-
-
-
             // 判读是否是缩放地图
             const newScale = scale;
             const { lastMapScale } = this.data
@@ -343,8 +330,6 @@ Page({
                 longitude,
               }
             });
-
-
 
 
             const { lastRequestLocation } = this.data
