@@ -81,6 +81,7 @@ Page({
   // 声明防抖函数，稍后在 onLoad 中初始化
   debounceSearchInput: () => { }, // 声明防抖搜索输入函数
   getListDebounced: () => { },
+  updateMarkersDebounced: () => { }, // 声明防抖marker更新函数
 
   // 声明地图上下文
   mapContext: null as any,
@@ -99,6 +100,11 @@ Page({
       this.getListDebounced = debounce((params: any) => {
         this.getList(params);
       }, 400);
+      
+      // 初始化marker更新防抖，避免频繁更新marker
+      this.updateMarkersDebounced = debounce((list: any, scale: number) => {
+        this.handleMarkersTitleWithScale(list, scale);
+      }, 200);
       // 检查是否处于单页模式（朋友圈分享场景）
       const isInSinglePageMode = isSinglePageMode();
       if (isInSinglePageMode) {
@@ -135,6 +141,7 @@ Page({
     };
   },
 
+ 
   async handleLoadCached() {
     try {
       const cached = await storage.getItemAsync('cached');
@@ -445,7 +452,6 @@ Page({
           scoreNumber: Math.round(item.averageScore || 0)
         }
       })
-      console.log('typeof latitude', typeof latitude)
       this.setData({
         lastRequestLocation: {
           latitude,
@@ -453,7 +459,8 @@ Page({
         },
         lastRequestTime: Date.now(),
       });
-      this.handleMarkersTitleWithScale(this.data._allSpots, scale);
+      // 使用防抖的marker更新，避免频繁更新
+      this.updateMarkersDebounced(this.data._allSpots, scale);
       this.handleCacheLatestRequestList(this.data._allSpots)
       if (this.data.filterType && this.data.filterType !== 'all') {
         const newTitle = Type_Map[this.data.filterType as MapTypeKeys]
@@ -506,13 +513,8 @@ Page({
       let iconPath = "";
       let newName = name;
 
-      if (scale <= 8) {
-        newName = name?.slice(0, 1);
-      } else if (scale <= 9) {
-        newName = name?.slice(0, 1);
-      } else if (scale <= 10) {
-        newName = name?.slice(0, 1);
-      } else if (scale <= 11) {
+      // 根据地图比例动态调整显示的文字长度
+      if (scale <= 11) {
         newName = name?.slice(0, 1);
       } else if (scale <= 12) {
         newName = name?.slice(0, 2);
@@ -551,7 +553,6 @@ Page({
         });
       }
 
-
       return {
         callout,
         alpha: 1,
@@ -565,6 +566,9 @@ Page({
         markerType: 'spot'
       };
     });
+    
+    
+    // 使用优化后的stableMarkers函数
     const finalMarkers = this.stableMarkers(this.data.markers, markers);
     this.setData({ markers: finalMarkers });
   },
@@ -601,26 +605,57 @@ Page({
     return iconPath;
   },
 
-  stableMarkers: function (oldMarkers: any, routeLineMarkers: any) {
-    // 首先对routeLineMarkers进行去重，确保没有重复的ID
-    const uniquerouteLineMarkers = [];
-    const seenIds = new Set();
+  stableMarkers: function (oldMarkers: any[], newMarkers: any[]) {
+    // 首先对newMarkers进行去重，确保没有重复的ID
+    const uniqueNewMarkers: any[] = [];
+    const seenIds: { [key: string]: boolean } = {};
 
-    for (const newMarker of routeLineMarkers) {
-      if (!seenIds.has(newMarker.id)) {
-        seenIds.add(newMarker.id);
-        uniquerouteLineMarkers.push(newMarker);
+    for (const newMarker of newMarkers) {
+      if (!seenIds[newMarker.id]) {
+        seenIds[newMarker.id] = true;
+        uniqueNewMarkers.push(newMarker);
       }
     }
 
-    return uniquerouteLineMarkers.map(newMarker => {
-      const old = oldMarkers.find((o: any) => o.id === newMarker.id);
-      // 只要内容没变就用旧对象
-      if (old && JSON.stringify(old) === JSON.stringify(newMarker)) {
-        return old;
+    // 批量处理，减少循环次数
+    const result: any[] = [];
+    const oldMarkersMap: { [key: string]: any } = {};
+    
+    // 构建查找表
+    for (const marker of oldMarkers) {
+      oldMarkersMap[marker.id] = marker;
+    }
+
+    for (const newMarker of uniqueNewMarkers) {
+      const old = oldMarkersMap[newMarker.id];
+      
+      // 如果找到旧的marker，比较关键属性来决定是否复用
+      if (old) {
+        // 只比较真正重要的属性，忽略可能频繁变化的属性
+        const isStable = 
+          old.longitude === newMarker.longitude &&
+          old.latitude === newMarker.latitude &&
+          old.iconPath === newMarker.iconPath &&
+          old.width === newMarker.width &&
+          old.height === newMarker.height &&
+          old.alpha === newMarker.alpha &&
+          old.markerType === newMarker.markerType &&
+          old.scoreNumber === newMarker.scoreNumber;
+        
+        // 如果关键属性没变，复用旧对象，但更新callout（避免闪动）
+        if (isStable) {
+          result.push({
+            ...old,
+            callout: newMarker.callout // 只更新callout，保持其他属性稳定
+          });
+          continue;
+        }
       }
-      return newMarker;
-    });
+      
+      result.push(newMarker);
+    }
+
+    return result;
   },
 
   getInitCurrentLocation: async function (scale: number) {
@@ -804,4 +839,5 @@ Page({
     })
   }
 });
+
 
