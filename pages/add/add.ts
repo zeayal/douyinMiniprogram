@@ -432,7 +432,7 @@ Page({
 
   // 选择图片
   chooseImage() {
-    tt.chooseMedia({
+    tt.chooseImage({
       count: 9 - this.data.pics.length,
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
