@@ -528,11 +528,7 @@ Page({
         newName = name?.slice(0, 7);
       }
 
-      // 根据平台设置padding值, 安卓上使用更大的值
       let paddingValue = 4;
-      if (this.data.isIos) {
-        paddingValue = 2; // 
-      }
       const isSelectedMarker = selectedMarkerId === markerId;
       const callout = {
         content: newName,
@@ -544,7 +540,6 @@ Page({
       };
 
       if (this.data.selectedSpot?.id === id) {
-        // iconPath = MARKER_ICON.selected;
         iconPath = this.getIcon({
           isSelected: true,
           scoreNumber
