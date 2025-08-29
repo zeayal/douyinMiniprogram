@@ -454,7 +454,7 @@ Page({
             const compressWithQuality = (quality: number) => {
               return new Promise<CompressedFile>((resolve, reject) => {
                 tt.compressImage({
-                  src: file.tempFilePath,
+                  src: file.path,
                   quality,
                   success: (res) => {
                     tt.getFileInfo({

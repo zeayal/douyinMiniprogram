@@ -29,10 +29,11 @@ Page({
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
+        console.log('res', res);
         const file = res.tempFiles[0];
         tt.uploadFile({
           url: BASE_URL + '/api/fs-service/uploadFileToOSS',
-          filePath: file.tempFilePath,
+          filePath: file.path,
           name: 'files',
           header: {
             enctype: "multipart/form-data"
@@ -41,8 +42,8 @@ Page({
             const data = res.data
             const jsonData = JSON.parse(data);
             if (jsonData.code === 0) {
-              tt.showToast({ title: jsonData.msg, icon: 'success' })
-              const newPic = { previewUrl: file.tempFilePath, serverFilename: jsonData.data.filename }
+              tt.showToast({ title: '上传成功', icon: 'success' })
+              const newPic = { previewUrl: file.path, serverFilename: jsonData.data.filename }
               const pics = this.data.pics.concat([newPic]);
               this.setData({
                 "pics": pics,
