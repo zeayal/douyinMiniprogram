@@ -111,7 +111,7 @@ Page({
   onShareAppMessage() {
     return {
       title: '好友分享了一个绝佳露营地点：' + this.data.detail.name + '，点击查看',
-      path: `pages/detail/detail?id=${this.data.parking_spot_id}&source=mp_wechat_pages_detail_onShareAppMessage`
+      path: `pages/detail/detail?id=${this.data.parking_spot_id}&source=mp_toutiao_pages_detail_onShareAppMessage`
     };
   },
 

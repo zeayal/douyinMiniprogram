@@ -1,7 +1,7 @@
 <view class="container">
     <search-bar bind:chooseLocation="handleChooseLocation" bind:onFilterTap="onFilterTap" filterType="{{filterType}}" />
     <view class="map-area">
-        <map id="mapContext" style="width: 100vw; height: 100%;" scale="{{scale}}" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location show-scale bindregionchange="onRegionChange" bindmarkertap="handleMarkertap" bindcallouttap="handleMarkertap">
+        <map id="mapContext" style="width: 100vw; height: 100%;" scale="{{scale}}" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location show-scale bindmarkertap="handleMarkertap" bindcallouttap="handleMarkertap" bindtouchend="debounceOnMapTouchEnd"></map>
         </map>
         <!-- 中心点图标，绝对定位在地图中央 -->
         <image class="center-marker" src="https://icons.unistar.icu/icons/center-marker.png" />

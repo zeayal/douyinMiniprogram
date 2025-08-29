@@ -4,10 +4,8 @@ import { getDistanceInfo, calculateDistanceGCJ02, navigationToLocation, getLocat
 import { storage } from "../../utils/storage";
 import { getMarkerColor } from "../../utils/util";
 import { encryptWithAESCBC, decryptWithAESCBC } from "../../utils/crypto";
-import { isIOS } from '../../utils/device';
 import debounce from '../../utils/debounce';
 import { setToastInstance, showToast } from '../../utils/toast';
-import { isSinglePageMode } from "../../utils/device";
 
 interface ParkingSpot {
   id: number;
@@ -58,7 +56,6 @@ const INIT_SCALE = 10;
 
 Page({
   data: {
-    isIos: isIOS(),
     _allSpots: [] as any[], // 不需要显示到视图上
     markers: [] as any[], // 地图标记点
     routeLineMarkers: [] as any[], // 地图标记点
@@ -81,40 +78,36 @@ Page({
   // 声明防抖函数，稍后在 onLoad 中初始化
   debounceSearchInput: () => { }, // 声明防抖搜索输入函数
   getListDebounced: () => { },
-  updateMarkersDebounced: () => { }, // 声明防抖marker更新函数
+
+  debounceOnMapTouchEnd: () => { },
 
   // 声明地图上下文
   mapContext: null as any,
 
   onLoad() {
     try {
-      this.mapContext = tt.createMapContext("mapContext", this);
-      this.getInitCurrentLocation(INIT_SCALE);
-      this.handleLoadCached();
-      // 初始化自定义Toast
-      this.initCustomToast();
-    } catch (e) {
-      console.error('mapLoadError', e)
-    } finally {
       // 初始化列表请求防抖，避免 onRegionChange 在短时间内多次触发请求
       this.getListDebounced = debounce((params: any) => {
         this.getList(params);
       }, 500);
-      
-      // 初始化marker更新防抖，避免频繁更新marker
-      this.updateMarkersDebounced = debounce((list: any, scale: number) => {
-        this.handleMarkersTitleWithScale(list, scale);
-      }, 1000);
-      // 检查是否处于单页模式（朋友圈分享场景）
-      const isInSinglePageMode = isSinglePageMode();
-      if (isInSinglePageMode) {
-        tt.showModal({
-          title: '提示',
-          content: '点击下方前往小程序使用完整功能',
-          showCancel: false,
-          confirmText: '知道了'
-        });
-      }
+
+      this.debounceOnMapTouchEnd = debounce((params: any) => {
+        this.onMapTouchEnd(params);
+      }, 200);
+
+      this.mapContext = tt.createMapContext("mapContext", this);
+      this.handleLoadCached();
+      this.getInitCurrentLocation(INIT_SCALE);
+      // 初始化自定义Toast
+      this.initCustomToast();
+    } catch (e) {
+      console.error('mapLoadError', e)
+      tt.showModal({
+        title: '提示',
+        content: '请点击小程序右上角->重新加载小程序',
+        showCancel: false,
+        confirmText: '知道了'
+      });
     }
 
   },
@@ -130,18 +123,18 @@ Page({
   onShareAppMessage() {
     return {
       title: SHARE_TITLE,
-      path: 'pages/map/map?source=mp_wechat_pages_map_onShareAppMessage'
+      path: 'pages/map/map?source=mp_toutiao_pages_map_onShareAppMessage'
     };
   },
 
   onShareTimeline() {
     return {
       title: SHARE_TITLE,
-      path: 'pages/map/map?source=mp_wechat_pages_map_onShareTimeline'
+      path: 'pages/map/map?source=mp_toutiao_pages_map_onShareTimeline'
     };
   },
 
- 
+
   async handleLoadCached() {
     try {
       const cached = await storage.getItemAsync('cached');
@@ -158,7 +151,7 @@ Page({
         const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached });
         if (Array.isArray(data)) {
           this.data._allSpots = data;
-          this.updateMarkersDebounced(this.data._allSpots, this.data.scale);
+          this.handleMarkersTitleWithScale({ list: this.data._allSpots, scale: this.data.scale });
         }
       }
     } catch (e) {
@@ -166,26 +159,11 @@ Page({
     }
   },
 
-  // 地图中心点移动到指定为经纬度
-  moveToNewLocation(longitude: number, latitude: number) {
-    this.mapContext.moveToLocation({
-      latitude,
-      longitude,
-    });
-    this.getListDebounced({
-      latitude,
-      longitude,
-      scale: 9,
-    })
-  },
-
   // 点击地图上的标记点
   handleMarkertap: async function (e: any) {
 
     const markerId = Number(e.detail.markerId);
-
     const clickedMarker = this.data.markers.find((m: any) => m.id === markerId);
-
     if (!clickedMarker) {
       console.log('点击地图上的标记点，未查找到clickedMarker', e)
       return
@@ -325,56 +303,73 @@ Page({
     });
   },
 
-  onRegionChange(e: any) {
-    const { type } = e.detail;
-    if (type === "end") {
-      const { centerLocation, scale: newScale } = e.detail || {};
-      if (!centerLocation) {
-        return;
-      }
-      const { latitude, longitude } = centerLocation;
-      this.setData({
-        centerLocation: centerLocation,
-        latitude,
-        longitude,
-        scale: newScale,
-      });
-      // 判读是否是缩放地图
-      const { lastMapScale } = this.data
-      console.log('lastMapScale', lastMapScale, newScale);
-      if (Math.abs(lastMapScale - newScale) >= 2) {
-        this.setData({
-          lastMapScale: newScale
+  onMapTouchEnd() {
+    console.log('onMapTouchEnd触摸结束')
+    this.mapContext.getCenterLocation({
+      success: ({ latitude, longitude }: any) => {
+        this.mapContext.getScale({
+          success: ({ scale }: any) => {
+
+
+
+
+
+            // 判读是否是缩放地图
+            const newScale = scale;
+            const { lastMapScale } = this.data
+            if (Math.abs(lastMapScale - newScale) >= 2) {
+              // 记录最新坐标
+              this.setData({
+                lastMapScale: scale,
+                centerLocation: {
+                  latitude,
+                  longitude,
+                }
+              });
+
+              this.getListDebounced({
+                latitude,
+                longitude,
+                scale: newScale
+              });
+              return;
+            }
+
+            // 记录最新坐标
+            this.setData({
+              lastMapScale: scale,
+              centerLocation: {
+                latitude,
+                longitude,
+              }
+            });
+
+
+
+
+            const { lastRequestLocation } = this.data
+            const distanceGCJ02 = lastRequestLocation?.latitude ? calculateDistanceGCJ02(
+              latitude,
+              longitude,
+              lastRequestLocation?.latitude,
+              lastRequestLocation?.longitude
+            ) : 0;
+            const moveDistance = lastRequestLocation ? (distanceGCJ02 || 0) / 1000 : this.data.distanceThreshold + 1;
+            const canDragRequest = moveDistance > this.data.distanceThreshold;
+            if (canDragRequest) {
+              this.getListDebounced({
+                latitude,
+                longitude,
+                scale: newScale
+              });
+            }
+
+
+          }
         })
-        this.getListDebounced({
-          latitude,
-          longitude,
-          scale: newScale
-        });
-        return;
       }
+    })
 
-
-
-
-      const { lastRequestLocation } = this.data
-      const distanceGCJ02 = lastRequestLocation?.latitude ? calculateDistanceGCJ02(
-        latitude,
-        longitude,
-        lastRequestLocation?.latitude,
-        lastRequestLocation?.longitude
-      ) : 0;
-      const moveDistance = lastRequestLocation ? (distanceGCJ02 || 0) / 1000 : this.data.distanceThreshold + 1;
-      const canDragRequest = moveDistance > this.data.distanceThreshold;
-      if (canDragRequest) {
-        this.getListDebounced({
-          latitude,
-          longitude,
-          scale: newScale
-        });
-      }
-
-    }
   },
 
   getWeakNetWorkList: async function ({
@@ -459,7 +454,7 @@ Page({
         lastRequestTime: Date.now(),
       });
       // 使用防抖的marker更新，避免频繁更新
-      this.updateMarkersDebounced(this.data._allSpots, scale);
+      this.handleMarkersTitleWithScale({ list: this.data._allSpots, scale, latitude, longitude });
       this.handleCacheLatestRequestList(this.data._allSpots)
       if (this.data.filterType && this.data.filterType !== 'all') {
         const newTitle = Type_Map[this.data.filterType as MapTypeKeys]
@@ -486,7 +481,7 @@ Page({
     }
   },
 
-  handleMarkersTitleWithScale: function (list: any, scale: number) {
+  handleMarkersTitleWithScale: function ({ list, scale, latitude, longitude }: any) {
     const { selectedMarkerId } = this.data;
 
     // 对输入列表进行去重，确保没有重复的ID
@@ -511,7 +506,6 @@ Page({
       } = item;
       let iconPath = "";
       let newName = name;
-
       // 根据地图比例动态调整显示的文字长度
       if (scale <= 11) {
         newName = name?.slice(0, 1);
@@ -565,11 +559,18 @@ Page({
         markerType: 'spot'
       };
     });
-    
-    
+
+
     // 使用优化后的stableMarkers函数
     const finalMarkers = this.stableMarkers(this.data.markers, markers);
-    this.setData({ markers: finalMarkers });
+
+    this.setData({
+      scale: scale,
+      latitude,
+      longitude,
+      markers: finalMarkers
+    })
+
   },
 
   getIcon({
@@ -619,7 +620,7 @@ Page({
     // 批量处理，减少循环次数
     const result: any[] = [];
     const oldMarkersMap: { [key: string]: any } = {};
-    
+
     // 构建查找表
     for (const marker of oldMarkers) {
       oldMarkersMap[marker.id] = marker;
@@ -627,11 +628,11 @@ Page({
 
     for (const newMarker of uniqueNewMarkers) {
       const old = oldMarkersMap[newMarker.id];
-      
+
       // 如果找到旧的marker，比较关键属性来决定是否复用
       if (old) {
         // 只比较真正重要的属性，忽略可能频繁变化的属性
-        const isStable = 
+        const isStable =
           old.longitude === newMarker.longitude &&
           old.latitude === newMarker.latitude &&
           old.iconPath === newMarker.iconPath &&
@@ -639,7 +640,7 @@ Page({
           old.height === newMarker.height &&
           old.alpha === newMarker.alpha &&
           old.markerType === newMarker.markerType;
-        
+
         // 如果关键属性没变，复用旧对象，但更新callout（避免闪动）
         if (isStable) {
           result.push({
@@ -649,7 +650,7 @@ Page({
           continue;
         }
       }
-      
+
       result.push(newMarker);
     }
 
@@ -710,31 +711,19 @@ Page({
       success: (scaleRes: any) => {
         let scale = scaleRes.scale;
         if (scaleRes.scale >= 6) {
-          scale = scale - 2;
+          scale = scale - 1;
         }
-        this.setData({
+        this.getListDebounced({
           latitude,
           longitude,
           scale
-        }, () => {
-          this.getListDebounced({
-            latitude,
-            longitude,
-            scale
-          })
         })
       },
       fail: () => {
-        this.setData({
-          scale: 8,
+        this.getListDebounced({
           latitude,
-          longitude
-        }, () => {
-          this.getListDebounced({
-            latitude,
-            longitude,
-            scale: 8,
-          })
+          longitude,
+          scale: 8,
         })
       }
     })
@@ -746,31 +735,19 @@ Page({
       success: (scaleRes: any) => {
         let scale = scaleRes.scale;
         if (scaleRes.scale <= 18) {
-          scale = scale + 2;
+          scale = scale + 1;
         }
-        this.setData({
-          scale,
+        this.getListDebounced({
           latitude,
           longitude,
-        }, () => {
-          this.getListDebounced({
-            latitude,
-            longitude,
-            scale,
-          })
+          scale,
         })
       },
       fail: () => {
-        this.setData({
-          scale: 13,
+        this.getListDebounced({
           latitude,
-          longitude
-        }, () => {
-          this.getListDebounced({
-            latitude,
-            longitude,
-            scale: 13,
-          })
+          longitude,
+          scale: 13,
         })
       }
     })
@@ -790,18 +767,10 @@ Page({
           scale = 10
         }
 
-        this.setData({
-          scale
-        }, () => {
-          this.mapContext.moveToLocation({
-            latitude,
-            longitude,
-          });
-          this.getListDebounced({
-            latitude,
-            longitude,
-            scale,
-          })
+        this.getListDebounced({
+          latitude,
+          longitude,
+          scale,
         })
       },
       fail: () => {
@@ -826,17 +795,15 @@ Page({
       });
     }
   },
-  // 点击热门线路
-  navigateToTourToutes() {
-    tt.navigateTo({
-      url: `/pages/tourRoutes/tourRoutes`,
-    });
-  },
+
   // 选择位置
   handleChooseLocation(e: any) {
     const { latitude, longitude } = e.detail || {};
-    this.setData({ scale: INIT_SCALE }, () => {
-      this.mapContext.moveToLocation({ latitude, longitude, });
+    this.setData({
+      scale: INIT_SCALE,
+      lastMapScale: INIT_SCALE,
+      centerLocation: { latitude, longitude }
+    }, () => {
       this.getList({ latitude, longitude, scale: this.data.scale })
     })
   }
