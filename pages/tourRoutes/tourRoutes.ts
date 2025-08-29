@@ -259,7 +259,7 @@ Page({
 
   // 点击地图上的标记点
   handleMarkertap: async function (e: any) {
-    const markerId = e.markerId;
+    const markerId = Number(e.detail.markerId);
     const clickedMarker = this.data.allMarkers.find(
       (m: any) => m.id === markerId
     );
