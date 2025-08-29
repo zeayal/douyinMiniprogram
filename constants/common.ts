@@ -1,8 +1,8 @@
-// export const BASE_URL = "https://unistar.icu";
+export const BASE_URL = "https://unistar.icu";
 
 // export const BASE_URL = "http://localhost:3000";
 
-export const BASE_URL = "http://192.168.235.160:3000";
+// export const BASE_URL = "http://192.168.235.160:3000";
 
 // export const BASE_URL = "http://192.168.17.160:3000";
 

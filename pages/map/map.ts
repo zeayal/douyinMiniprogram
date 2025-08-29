@@ -639,8 +639,7 @@ Page({
           old.width === newMarker.width &&
           old.height === newMarker.height &&
           old.alpha === newMarker.alpha &&
-          old.markerType === newMarker.markerType &&
-          old.scoreNumber === newMarker.scoreNumber;
+          old.markerType === newMarker.markerType;
         
         // 如果关键属性没变，复用旧对象，但更新callout（避免闪动）
         if (isStable) {
@@ -707,7 +706,6 @@ Page({
         if (scaleRes.scale >= 6) {
           scale = scale - 2;
         }
-        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           latitude,
           longitude,
@@ -744,7 +742,6 @@ Page({
         if (scaleRes.scale <= 18) {
           scale = scale + 2;
         }
-        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           scale,
           latitude,
@@ -787,7 +784,6 @@ Page({
           scale = 10
         }
 
-        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           scale
         }, () => {
