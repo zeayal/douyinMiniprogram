@@ -99,12 +99,12 @@ Page({
       // 初始化列表请求防抖，避免 onRegionChange 在短时间内多次触发请求
       this.getListDebounced = debounce((params: any) => {
         this.getList(params);
-      }, 400);
+      }, 500);
       
       // 初始化marker更新防抖，避免频繁更新marker
       this.updateMarkersDebounced = debounce((list: any, scale: number) => {
         this.handleMarkersTitleWithScale(list, scale);
-      }, 200);
+      }, 1000);
       // 检查是否处于单页模式（朋友圈分享场景）
       const isInSinglePageMode = isSinglePageMode();
       if (isInSinglePageMode) {
@@ -150,7 +150,6 @@ Page({
       //   const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached_weak_list });
       //   if (Array.isArray(data)) {
       //     this.data._allSpots = data;
-      //     this.handleMarkersTitleWithScale(this.data._allSpots, this.data.scale);
       //     // 如果有500公里缓存先用这个
       //     return
       //   }
@@ -159,7 +158,7 @@ Page({
         const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached });
         if (Array.isArray(data)) {
           this.data._allSpots = data;
-          this.handleMarkersTitleWithScale(this.data._allSpots, this.data.scale);
+          this.updateMarkersDebounced(this.data._allSpots, this.data.scale);
         }
       }
     } catch (e) {
@@ -173,7 +172,7 @@ Page({
       latitude,
       longitude,
     });
-    this.getList({
+    this.getListDebounced({
       latitude,
       longitude,
       scale: 9,
@@ -191,8 +190,8 @@ Page({
       console.log('点击地图上的标记点，未查找到clickedMarker', e)
       return
     }
-    console.log('markerId', markerId, clickedMarker)
-    this.setTapAvtiveMarker(markerId);
+
+    // this.setTapAvtiveMarker(markerId);
     const currentSelectedDetail = this.data._allSpots.find((sopt: any) => sopt.markerId === clickedMarker.id);
     if (!currentSelectedDetail) {
       console.error('未找到对应的营地信息');
@@ -668,7 +667,7 @@ Page({
       centerLocation: { latitude, longitude },
     });
     // 获取常规营地列表
-    this.getList({ latitude, longitude, scale })
+    this.getListDebounced({ latitude, longitude, scale })
     // 获取500公里内营地列表并缓存
     // this.getWeakNetWorkList({ latitude, longitude });
   },
@@ -711,7 +710,7 @@ Page({
           longitude,
           scale
         }, () => {
-          this.getList({
+          this.getListDebounced({
             latitude,
             longitude,
             scale
@@ -724,7 +723,7 @@ Page({
           latitude,
           longitude
         }, () => {
-          this.getList({
+          this.getListDebounced({
             latitude,
             longitude,
             scale: 8,
@@ -747,7 +746,7 @@ Page({
           latitude,
           longitude,
         }, () => {
-          this.getList({
+          this.getListDebounced({
             latitude,
             longitude,
             scale,
@@ -760,7 +759,7 @@ Page({
           latitude,
           longitude
         }, () => {
-          this.getList({
+          this.getListDebounced({
             latitude,
             longitude,
             scale: 13,
@@ -791,7 +790,7 @@ Page({
             latitude,
             longitude,
           });
-          this.getList({
+          this.getListDebounced({
             latitude,
             longitude,
             scale,
@@ -799,7 +798,7 @@ Page({
         })
       },
       fail: () => {
-        this.getList({
+        this.getListDebounced({
           latitude,
           longitude,
           scale: INIT_SCALE,
@@ -816,7 +815,7 @@ Page({
       }
       this.setData({ filterType: type }, () => {
         const { latitude, longitude } = this.data.centerLocation;
-        this.getList({ latitude, longitude, scale: this.data.scale });
+        this.getListDebounced({ latitude, longitude, scale: this.data.scale });
       });
     }
   },
