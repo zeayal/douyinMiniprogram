@@ -138,16 +138,16 @@ Page({
   async handleLoadCached() {
     try {
       const cached = await storage.getItemAsync('cached');
-      const cached_weak_list = await storage.getItemAsync('cached_weak_list');
-      if (cached_weak_list) {
-        const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached_weak_list });
-        if (Array.isArray(data)) {
-          this.data._allSpots = data;
-          this.handleMarkersTitleWithScale(this.data._allSpots, this.data.scale);
-          // 如果有500公里缓存先用这个
-          return
-        }
-      }
+      // const cached_weak_list = await storage.getItemAsync('cached_weak_list');
+      // if (cached_weak_list) {
+      //   const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached_weak_list });
+      //   if (Array.isArray(data)) {
+      //     this.data._allSpots = data;
+      //     this.handleMarkersTitleWithScale(this.data._allSpots, this.data.scale);
+      //     // 如果有500公里缓存先用这个
+      //     return
+      //   }
+      // }
       if (cached) {
         const data = decryptWithAESCBC({ key: FRONT_AES_PUBLIC_KEY, ciphertext: cached });
         if (Array.isArray(data)) {
@@ -352,7 +352,6 @@ Page({
 
 
       const { lastRequestLocation } = this.data
-      console.log('lastRequestLocation?.latitude', typeof lastRequestLocation?.latitude)
       const distanceGCJ02 = lastRequestLocation?.latitude ? calculateDistanceGCJ02(
         latitude,
         longitude,
@@ -368,12 +367,6 @@ Page({
           scale: newScale
         });
       }
-
-
-      // if (causedBy === 'scale') {
-      //   // 弱网优化
-      //   this.handleMarkersTitleWithScale(this.data._allSpots, newScale);
-      // }
 
     }
   },
@@ -637,7 +630,6 @@ Page({
 
   getInitCurrentLocation: async function (scale: number) {
     const res = await getLocationAsync({ showModalTip: true });
-    console.log('getInitCurrentLocationres', res)
     const { latitude, longitude } = res;
     this.setData({
       scale: scale,
@@ -649,7 +641,7 @@ Page({
     // 获取常规营地列表
     this.getList({ latitude, longitude, scale })
     // 获取500公里内营地列表并缓存
-    this.getWeakNetWorkList({ latitude, longitude });
+    // this.getWeakNetWorkList({ latitude, longitude });
   },
 
   // 跳转到新增营地页面
@@ -685,7 +677,7 @@ Page({
         if (scaleRes.scale >= 6) {
           scale = scale - 2;
         }
-        this.handleMarkersTitleWithScale(this.data._allSpots, scale);
+        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           latitude,
           longitude,
@@ -722,7 +714,7 @@ Page({
         if (scaleRes.scale <= 18) {
           scale = scale + 2;
         }
-        this.handleMarkersTitleWithScale(this.data._allSpots, scale);
+        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           scale,
           latitude,
@@ -758,14 +750,14 @@ Page({
       success: (scaleRes: any) => {
         let scale = scaleRes.scale;
         if (scaleRes.scale <= 12) {
-          scale = 18
+          scale = 13
         }
 
         if (scaleRes.scale > 12) {
-          scale = 11
+          scale = 10
         }
 
-        this.handleMarkersTitleWithScale(this.data._allSpots, scale);
+        // this.handleMarkersTitleWithScale(this.data._allSpots, scale);
         this.setData({
           scale
         }, () => {
