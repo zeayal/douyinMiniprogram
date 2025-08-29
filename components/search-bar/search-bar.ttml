@@ -2,7 +2,7 @@
 <view class="search-bar-container">
   <view class="search-input-button-container" bind:tap="clickSearch">
     <image class="icon-search" src="https://icons.unistar.icu/icons/icon-search.png" mode="aspectFit" />
-    <input class="search-input" placeholder="输入停车点搜索，支持停车场名、目的地等任意地点名称" value="{{searchQuery}}" bindinput="handleSearchInput" disabled />
+    <input class="search-input" placeholder="搜索停车点，支持停车场名、目的地等任意地点名称" value="{{searchQuery}}" bindinput="handleSearchInput" disabled />
   </view>
   <view class="scroll-container">
     <view class="filter-float-bar">
