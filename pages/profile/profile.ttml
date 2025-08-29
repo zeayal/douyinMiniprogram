@@ -31,13 +31,13 @@
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/collect.png"></image>
           </view>
-          <text class="func-name">营地收藏</text>
+          <text class="func-name">停车场收藏</text>
         </view>
         <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="checkin">
           <view class="icon-wrapper">
             <image class="func-icon" src="https://icons.unistar.icu/icons/like.png"></image>
           </view>
-          <text class="func-name">营地打卡</text>
+          <text class="func-name">停车场打卡</text>
         </view>
         <!-- <view class="grid-item {{!userInfo.isVip ? 'disabled' : ''}}" bindtap="handleMenuTap" data-type="camp">
           <view class="icon-wrapper">

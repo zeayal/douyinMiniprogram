@@ -37,7 +37,7 @@
     "list": [
       {
         "pagePath": "pages/map/map",
-        "text": "露营地",
+        "text": "停车场",
         "iconPath": "./images/tabbar/map.png",
         "selectedIconPath": "./images/tabbar/map_selected.png"
       },

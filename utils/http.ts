@@ -18,7 +18,7 @@ interface WxResponse<T> {
 }
 
 // 存储每个接口的最新请求任务
-const requestTasks: { [key: string]: WechatMiniprogram.RequestTask } = {};
+const requestTasks: { [key: string]: any } = {};
 
 export const request = async <T>(options: {
   url: string;

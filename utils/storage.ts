@@ -16,7 +16,7 @@ const storage = {
           resolve(res.data)
         },
         fail: (error: any) => {
-          console.log('getItemAsyncError key:', key, error)
+          // console.log('getItemAsyncError key:', key, error)
           resolve(undefined)
         },
         complete: () => {
@@ -39,10 +39,10 @@ const storage = {
           resolve(true);
         },
         fail: (e: any) => {
-          console.log('setItemAsyncError key: value:', key, value, e)
+          // console.log('setItemAsyncError key: value:', key, value, e)
         },
         complete: () => {
-          console.log('setItemAsync:complete');
+          // console.log('setItemAsync:complete');
         }
       });
     })

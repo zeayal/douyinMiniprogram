@@ -342,7 +342,7 @@ Page({
       // 判读是否是缩放地图
       const { lastMapScale } = this.data
       console.log('lastMapScale', lastMapScale, newScale);
-      if (Math.abs(lastMapScale - newScale) > 1) {
+      if (Math.abs(lastMapScale - newScale) >= 2) {
         this.setData({
           lastMapScale: newScale
         })

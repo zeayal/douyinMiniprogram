@@ -5,7 +5,7 @@
       <view class="action-group">
         <view bind:tap="handleNavTap" class="action-item action-nav">
           <image src="https://icons.unistar.icu/icons/icon-nav.png" mode="aspectFit" />
-          <view>导航</view>
+          <view>去停车</view>
         </view>
         <view class="action-item action-fav" bind:tap="handleFavTap">
           <image src="{{isCollected ? 'https://icons.unistar.icu/icons/icon-faved.png' : 'https://icons.unistar.icu/icons/icon-fav.png' }}" mode="aspectFit" />

@@ -37,7 +37,7 @@
         <!-- 当前定位 -->
         <view class="floating-button" bind:tap="handleClickCurrentLocation">
             <image src="https://icons.unistar.icu/icons/current-location.png" class="icon"></image>
-            <view class="text">当前定位</view>
+            <view class="text">附近停车</view>
         </view>
 
         <view class="floating-button" bind:tap="navigateToMy">

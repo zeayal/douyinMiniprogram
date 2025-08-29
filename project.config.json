@@ -15,10 +15,7 @@
         "autoCompile": true,
         "compileHotReLoad": true,
         "nativeCompile": true,
-        "useCompilerPlugins": [
-            "typescript",
-            "sass"
-        ]
+        "useCompilerPlugins": ["typescript", "sass"]
     },
     "condition": {},
     "editorSetting": {
@@ -30,5 +27,6 @@
         "packageJsonPath": "./package.json",
         "miniprogramNpmDistDir": "./miniprogram_npm/"
     }],
-    "douyinProjectType": "native"
+    "douyinProjectType": "native",
+    "projectname": "镜里山河"
 }

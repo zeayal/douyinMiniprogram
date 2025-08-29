@@ -1,17 +1,17 @@
 <!--pages/about/about.ttml-->
 <view class="container">
-  <view class="about-card">
-    <view class="about-title">关于我们</view>
+    <view class="about-card">
+        <view class="about-title">关于我们</view>
 
-    <text class="about-content">
-      这是一款专为房车床车自驾爱好者打造的实用工具，整合海量真实营地信息，精准定位、详细设施介绍、用户真实评价，助你快速找到心仪营地。​
-    
-      欢迎关注我们的小程序“镜里山河”，为您带来更多的停车功能。
+        <text class="about-content">
+            这是一款专为房车床车自驾爱好者打造的停车及营地服务工具，依托高精地图，整合海量真实营地及配套停车场信息，精准定位营地与周边停车场，提供详细停车设施、营地设施介绍及用户真实评价，助你快速找到适配的停车场地与心仪营地。
 
-      未来，我们将持续拓展营地资源，优化功能体验，期待成为你房车自驾路上的可靠伙伴，陪你探索更多未知精彩！
-    </text>
-    <view class="about-footer">
-      <text class="about-version">版本号: 1.0.0</text>
+            欢迎关注我们的小程序 “镜里山河”，这里有丰富的停车相关功能等你体验。
+
+            未来，我们将持续拓展营地及停车场资源，优化停车导航、在线缴费等功能体验，期待成为你房车自驾路上的可靠伙伴，让你停车无忧，探索更多未知精彩！
+        </text>
+        <view class="about-footer">
+            <text class="about-version">版本号: 1.0.0</text>
+        </view>
     </view>
-  </view>
 </view>

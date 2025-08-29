@@ -44,7 +44,7 @@
             </view>
             <view class="button-group">
                 <view class="nav-button" bind:tap="nav">
-                    <text>导航前往</text>
+                    <text>前往停车点</text>
                     <block tt:if="{{directDistance}}">
                         <image class="spot-distance-image" src="https://icons.unistar.icu/icons/arrow_right.png" mode="aspectFill" />
                         <text class="spot-distance-text">直线距离{{(directDistance.formatted)}}</text>
