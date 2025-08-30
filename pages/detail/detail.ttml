@@ -81,7 +81,7 @@
         <!-- 打卡记录 -->
         <view class="camp-detail">
             <view class="section-title">最新打卡</view>
-            <!-- <view class="check-in-empty-list">
+            <view class="check-in-empty-list">
                 <view>🌟 <text class="highlight-1">你的一句话</text>，能帮大家<text class="highlight-1">少走不少冤枉路！</text>
                 </view>
                 <view>📝
@@ -95,10 +95,10 @@
                     🚽 <text class="highlight-2">厕所</text>可用时间？
                 </view>
                 <view>
-                    📍 <text class="record-check-in-text highlight-3" bind:tap="showCheckinModal">[打卡评分]</text>
-                    或 <text class="record-check-in-text highlight-4" bind:tap="handleModify">[修改]</text> 分享营地最新情况！
+                    📍 <text class="record-check-in-text highlight-3" bind:tap="showCheckinModal">打卡评分</text>分享营地最新情况！
+                    <!-- 或 <text class="record-check-in-text highlight-4" bind:tap="handleModify">[修改]</text> 分享营地最新情况！ -->
                 </view>
-            </view> -->
+            </view>
             <view class="action-items">
                 <view class="action-item" tt:for="{{checkInList}}" tt:key="id">
                     <view class="action-header">
